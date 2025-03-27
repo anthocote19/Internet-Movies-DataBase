@@ -4,7 +4,7 @@ With this new era of technology, the company want to ditch the old paper and pro
 
 The project can be done by teams of 2 peoples maximum
 
-As always you will have to defend your project with a short presentation.
+As always you will have to defend your project with a short presentation. 
 
  
 
