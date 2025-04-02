@@ -13,10 +13,61 @@ $stmt = $pdo->prepare("SELECT movies.* FROM purchases JOIN movies ON purchases.m
 $stmt->execute([$user_id]);
 $purchased_movies = $stmt->fetchAll();
 ?>
-<h2>Vos films achetés</h2>
-<ul>
-    <?php foreach ($purchased_movies as $movie): ?>
-        <li><?= $movie['title'] ?></li>
-    <?php endforeach; ?>
-</ul>
-<a href="logout.php">Déconnexion</a>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Vos films achetés</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Vos films achetés</h2>
+        <ul>
+            <?php foreach ($purchased_movies as $movie): ?>
+                <li><?= htmlspecialchars($movie['title']) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <a href="logout.php">Déconnexion</a>
+    </div>
+</body>
+</html>
