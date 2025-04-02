@@ -1,0 +1,102 @@
+/* Conteneur principal avec fond futuriste */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+/* Conteneur du formulaire */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+/* Formulaire avec effet lumineux */
+form {
+    background: rgba(255, 255, 255, 0.1); /* Fond semi-transparent */
+    backdrop-filter: blur(10px); /* Effet de flou moderne */
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 153, 255, 0.3); /* Effet néon */
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Titre avec effet glow */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #00c3ff;
+    text-shadow: 0 0 10px #00c3ff, 0 0 20px #0083ff; /* Effet néon */
+}
+
+/* Champs de saisie futuristes */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #00c3ff;
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Effet lumineux sur focus */
+input:focus {
+    border-color: #00c3ff;
+    outline: none;
+    box-shadow: 0 0 10px #00c3ff;
+}
+
+/* Bouton futuriste */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #00c3ff, #0083ff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Effet de survol */
+button:hover {
+    background: linear-gradient(90deg, #0083ff, #0053ff);
+    box-shadow: 0 0 10px #00c3ff;
+}
+
+/* Message d'erreur */
+p {
+    color: #ff5e57;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Lien d'inscription avec effet lumineux */
+a {
+    text-align: center;
+    color: #00c3ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+/* Effet lumineux au survol */
+a:hover {
+    color: #0083ff;
+    text-shadow: 0 0 10px #00c3ff;
+}

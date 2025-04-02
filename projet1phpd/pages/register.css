@@ -1,0 +1,104 @@
+/* Conteneur principal pour centrer */
+.register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #141e30, #243b55);
+}
+
+/* Conteneur du formulaire */
+.register-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+/* Formulaire */
+form {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Titre */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Champs de saisie */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+/* Effet sur focus */
+input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
+}
+
+/* Bouton */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* Effet de survol */
+button:hover {
+    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
+}
+
+/* Message d'erreur */
+p {
+    color: #ff4d4d;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Lien d'inscription */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #00c6ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* Effet de survol */
+a:hover {
+    text-decoration: underline;
+    color: #0072ff;
+}
