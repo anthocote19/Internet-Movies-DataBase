@@ -14,7 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute(['username' => $username, 'email' => $email, 'password' => $password_hash])) {
             $_SESSION['user_id'] = $pdo->lastInsertId();
             $_SESSION['username'] = $username;
-            header("Location: profile.php");
+
+            // Générer les initiales de l'utilisateur
+            $name_parts = explode(" ", trim($username));
+            $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
+            $_SESSION['initiales'] = $initiales;
+
+            header("Location: ../index.php");
             exit();
         } else {
             $error = "Erreur lors de l'inscription.";
@@ -31,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
-    <link rel="stylesheet" href="../pages/register.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="register.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -44,8 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" placeholder="Mot de passe" required>
             <button type="submit">S'inscrire</button>
         </form>
-        <?php if (!empty($error)) echo "<p>$error</p>"; ?>
-        <a href="login.php">Déjà inscrit ? Connecte-toi</a>
+        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
+
+        <?php if (!isset($_SESSION['user_id'])): ?>
+            <a href="login.php">Déjà inscrit ? Connecte-toi</a>
+        <?php endif; ?>
     </div>
 </div>
 

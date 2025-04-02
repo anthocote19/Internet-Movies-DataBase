@@ -24,10 +24,10 @@ if (!in_array($category, $allowed_categories)) {
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">Anthony & Tiago's Movies</a>
+            <a href="../index.php">Anthony & Tiago's Movies</a>
         </div>
         <ul class="nav-links">
-            <li><a href="index.php">Accueil</a></li>
+            <li><a href="../index.php">Accueil</a></li>
             <li><a href="pages/categories.php">Catégories</a></li>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li><a href="pages/profile.php"> Mon Profil</a></li>

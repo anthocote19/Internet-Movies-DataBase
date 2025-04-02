@@ -1,0 +1,56 @@
+/* Style de la section des résultats de recherche */
+.search-results {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-results h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Liste des films */
+.search-results ul {
+    list-style: none;
+    padding: 0;
+}
+
+.search-results li {
+    background: #f9f9f9;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-results li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Liens des films */
+.search-results li a {
+    text-decoration: none;
+    color: #444;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.search-results li a:hover {
+    color: #d9534f;
+}
+
+/* Icône de film */
+.search-results li::before {
+    content: "🎬";
+    margin-right: 10px;
+    font-size: 18px;
+}

@@ -18,6 +18,14 @@ if (!$movie) {
     echo "<p>Film introuvable.</p>";
     exit();
 }
+
+
+$title = htmlspecialchars($movie['title'] ?? 'Titre inconnu');
+$director = htmlspecialchars($movie['director'] ?? 'Non renseigné');
+$actors = htmlspecialchars($movie['actors'] ?? 'Non renseigné');
+$price = htmlspecialchars($movie['price'] ?? '0.00');
+$image = htmlspecialchars($movie['image'] ?? 'default.jpg'); 
+
 ?>
 
 <!DOCTYPE html>
@@ -25,21 +33,39 @@ if (!$movie) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($movie['title']); ?> - Détails</title>
-    <link rel="stylesheet" href="../assets/css/styles.css?v=<?php echo time(); ?>">
+    <title><?= $title; ?> - Détails</title>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
 </head>
 <body>
 
-<?php include '../includes/header.php'; ?>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../index.php">Anthony & Tiago's Movies</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.php">Accueil</a></li>
+            <li><a href="categories.php">Catégories</a></li>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <li class="user-initials"><?= htmlspecialchars($_SESSION['initiales'] ?? '?'); ?></li>
+                <li><a href="logout.php">Déconnexion</a></li>
+            <?php else: ?>
+                <li><a href="login.php">Connexion</a></li>
+                <li><a href="register.php">Inscription</a></li>
+            <?php endif; ?>
+        </ul>
+        <button class="menu-toggle">☰</button>
+    </nav>
+</header>
 
 <section class="movie-details">
     <div class="container">
-        <h1><?= htmlspecialchars($movie['title']); ?></h1>
-        <img src="../assets/images/<?= htmlspecialchars($movie['image']); ?>" alt="<?= htmlspecialchars($movie['title']); ?>">
-        <p><strong>Réalisateur:</strong> <a href="director_movies.php?director=<?= urlencode($movie['director']); ?>"><?= htmlspecialchars($movie['director']); ?></a></p>
-        <p><strong>Acteurs:</strong> <?= htmlspecialchars($movie['actors']); ?></p>
-        <p><strong>Prix:</strong> <?= htmlspecialchars($movie['price']); ?> €</p>
-        <a href="cart.php?add=<?= $movie['id']; ?>" class="btn">🛒 Ajouter au panier</a>
+        <h1><?= $title; ?></h1>
+        <img src="../assets/images/<?= $image; ?>" alt="<?= $title; ?>">
+        <p><strong>Réalisateur:</strong> <a href="director_movies.php?director=<?= urlencode($director); ?>"><?= $director; ?></a></p>
+        <p><strong>Acteurs:</strong> <?= $actors; ?></p>
+        <p><strong>Prix:</strong> <?= number_format((float)$price, 2); ?> €</p>
+        <a href="cart.php?add=<?= $movie_id; ?>" class="btn">🛒 Ajouter au panier</a>
     </div>
 </section>
 

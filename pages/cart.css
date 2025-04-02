@@ -1,0 +1,180 @@
+
+.user-initial {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: cyan;
+    color: #0e0e0e;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px cyan;
+}
+
+/* Bouton retour */
+.btn-back {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    color: white;
+    background: #ff6600;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ff6600;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: #ff4500;
+    box-shadow: 0 0 15px #ff4500;
+    transform: scale(1.1);
+}
+
+/* Section panier */
+.cart {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+/* Styles du menu déroulant pour les initiales */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+
+.cart {
+    width: 80%;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(30, 30, 30, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.cart h1 {
+    font-size: 2em;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px cyan;
+}
+
+/* Liste des films */
+.cart-items {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-items li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cart-items li:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px cyan;
+}
+
+/* Image du film */
+.cart-items img {
+    width: 80px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+/* Infos du film */
+.cart-items div {
+    flex: 1;
+    margin-left: 15px;
+    text-align: left;
+}
+
+.cart-items h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.cart-items p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+/* Boutons */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.btn:hover {
+    transform: scale(1.1);
+}
+
+/* Bouton retirer */
+.cart-items .btn {
+    background: rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+.cart-items .btn:hover {
+    background: rgba(255, 0, 0, 1);
+}
+
+/* Bouton vider panier */
+.cart a.btn {
+    background: rgba(255, 69, 0, 0.8);
+    box-shadow: 0 0 15px rgba(255, 69, 0, 0.8);
+    margin-top: 15px;
+}
+
+.cart a.btn:hover {
+    background: rgba(255, 69, 0, 1);
+}
+
+/* Total */
+.cart h2 {
+    margin-top: 20px;
+    font-size: 1.5em;
+    text-shadow: 0 0 10px cyan;
+}
+
