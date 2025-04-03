@@ -1,7 +1,7 @@
 1 - Project overview
 You are part of Internet Movies DataBase & co and as such are task to provide a solution allowing people to upload and see information about movies.
 With this new era of technology, the company want to ditch the old paper and provide a full solution allowing people to see information online. This need to be using web technologies such as HTML, CSS and PHP (using a SQL database).  
-
+ 
 The project can be done by teams of 2 peoples maximum
 
 As always you will have to defend your project with a short presentation.  
