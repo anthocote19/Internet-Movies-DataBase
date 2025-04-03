@@ -15,7 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            header("Location: profile.php");
+
+            // Générer les initiales (prend la première lettre du prénom + première lettre du nom)
+            $name_parts = explode(" ", trim($user['username']));
+            $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
+            $_SESSION['initiales'] = $initiales;
+
+            header("Location: ../index.php");
             exit();
         } else {
             $error = "Email ou mot de passe incorrect.";
@@ -32,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="../pages/login.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
 
@@ -44,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" placeholder="Mot de passe" required>
             <button type="submit">Se connecter</button>
         </form>
-        <?php if (!empty($error)) echo "<p>$error</p>"; ?>
+        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
 
         <a href="register.php">Pas encore inscrit ? Inscris-toi</a>
     </div>

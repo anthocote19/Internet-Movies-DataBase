@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle, #0a0a0a 0%, #1a1a1a 100%);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* 🔵 Navigation futuriste */
+.navbar {
+    background: linear-gradient(90deg, #111 0%, #222 100%);
+    padding: 15px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 0px 20px #00c3ff;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .logo a {
+    color: #00c3ff;
+    font-size: 24px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+.navbar .logo a:hover {
+    text-shadow: 0 0 10px #00c3ff, 0 0 20px #00c3ff;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 18px;
+    transition: 0.3s ease-in-out;
+    position: relative;
+}
+
+.nav-links a:hover {
+    color: #00c3ff;
+    text-shadow: 0 0 5px #00c3ff;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background: #00c3ff;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* 🎬 Conteneur principal */
+.cart {
+    max-width: 900px;
+    margin: 120px auto;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 0px 25px #00c3ff;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 30px;
+    text-shadow: 0 0 10px #00c3ff;
+    margin-bottom: 20px;
+}
+
+/* 🛒 Style du panier */
+.cart-items {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-items li {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 0 15px #00c3ff;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.cart-items li:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px #00c3ff;
+}
+
+.cart-items img {
+    width: 80px;
+    height: 100px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.cart-items h3 {
+    font-size: 18px;
+    color: #00c3ff;
+}
+
+.cart-items p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #ccc;
+}
+
+/* 🔘 Boutons futuristes */
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: linear-gradient(90deg, #00c3ff, #008cff);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+    background: linear-gradient(90deg, #008cff, #00c3ff);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00c3ff;
+}
+
+/* 🗑 Vider le panier */
+.btn-danger {
+    background: linear-gradient(90deg, #ff0000, #cc0000);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(90deg, #cc0000, #ff0000);
+    box-shadow: 0 0 15px #ff0000;
+}
+
+/* 🎭 Effet glitch */
+@keyframes glitch {
+    0% { text-shadow: 2px 2px #00c3ff, -2px -2px #008cff; }
+    50% { text-shadow: -2px -2px #00c3ff, 2px 2px #008cff; }
+    100% { text-shadow: 2px 2px #00c3ff, -2px -2px #008cff; }
+}
+
+.glitch {
+    animation: glitch 0.8s infinite alternate;
+}
+
+/* 🟢 Responsive */
+@media (max-width: 768px) {
+    .cart-items li {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .cart-items img {
+        margin-bottom: 10px;
+    }
+}
