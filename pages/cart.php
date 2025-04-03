@@ -93,7 +93,9 @@ $cart_count = count($_SESSION['cart']);
         </ul>
     </nav>
 </header>
-
+<br>
+<br>
+<br>
 <section class="cart">
     <h1>Votre Panier</h1>
     <?php if (empty($movies)): ?>

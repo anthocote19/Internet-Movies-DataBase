@@ -9,65 +9,59 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-$stmt = $pdo->prepare("SELECT movies.* FROM purchases JOIN movies ON purchases.movie_id = movies.id WHERE purchases.user_id = ?");
+
+$stmt = $pdo->prepare("SELECT username, email, date_joined FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
-$purchased_movies = $stmt->fetchAll();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    echo "Utilisateur non trouvé.";
+    exit();
+}
+
+
+$stmt = $pdo->prepare("SELECT movies.title, movies.image FROM purchases 
+                        JOIN movies ON purchases.movie_id = movies.id 
+                        WHERE purchases.user_id = ?");
+$stmt->execute([$user_id]);
+$purchased_movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Vos films achetés</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #fff;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        a {
-            text-decoration: none;
-            color: #007bff;
-            margin-top: 20px;
-            display: inline-block;
-        }
-
-        a:hover {
-            color: #0056b3;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - Anthony & Tiago's Movies</title>
+    <link rel="stylesheet" href="./profile.css?v=<?php echo time(); ?>">
 </head>
 <body>
-    <div>
-        <h2>Vos films achetés</h2>
-        <ul>
-            <?php foreach ($purchased_movies as $movie): ?>
-                <li><?= htmlspecialchars($movie['title']) ?></li>
-            <?php endforeach; ?>
-        </ul>
-        <a href="logout.php">Déconnexion</a>
+
+<section class="profile-container">
+    <h1>Profil de <?= htmlspecialchars($user['username']) ?></h1>
+    <div class="profile-info">
+        <p><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($user['username']) ?></p>
+        <p><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></p>
+        <p><strong>Membre depuis :</strong> <?= date("d/m/Y", strtotime($user['date_joined'])) ?></p>
     </div>
+
+    <h2>Vos films achetés</h2>
+    <div class="movies-container">
+        <?php if (empty($purchased_movies)): ?>
+            <p>Vous n'avez acheté aucun film pour le moment.</p>
+        <?php else: ?>
+            <?php foreach ($purchased_movies as $movie): ?>
+                <div class="movie-card">
+                    <img src="../assets/images/<?= htmlspecialchars($movie['image']) ?>" alt="<?= htmlspecialchars($movie['title']) ?>">
+                    <h3><?= htmlspecialchars($movie['title']) ?></h3>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
+    <a href="../index.php" class="btn return-btn">Retour à l'accueil</a>
+</section>
+
+<?php include '../includes/footer.php'; ?>
+
 </body>
 </html>

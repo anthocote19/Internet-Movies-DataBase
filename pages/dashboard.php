@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php'; // Assure-toi que ce chemin est correct
-
+require_once '../config/database.php'; 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -9,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $message = "";
+$password_updated = false; // Variable pour savoir si le mot de passe a été changé
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_password = trim($_POST['current_password']);
@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
             if ($stmt->execute([$hashed_password, $user_id])) {
                 $message = "Mot de passe mis à jour avec succès.";
+                $password_updated = true; // Le mot de passe a été changé
             } else {
                 $message = "Une erreur est survenue, veuillez réessayer.";
             }
@@ -55,18 +56,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php if (!empty($message)): ?>
                 <p><?php echo htmlspecialchars($message); ?></p>
             <?php endif; ?>
-            <form method="POST">
-                <label>Mot de passe actuel :</label>
-                <input type="password" name="current_password" required><br>
 
-                <label>Nouveau mot de passe :</label>
-                <input type="password" name="new_password" required><br>
+            <?php if (!$password_updated): ?>
+                <form method="POST">
+                    <label>Mot de passe actuel :</label>
+                    <input type="password" name="current_password" required><br>
 
-                <label>Confirmer le nouveau mot de passe :</label>
-                <input type="password" name="confirm_password" required><br>
+                    <label>Nouveau mot de passe :</label>
+                    <input type="password" name="new_password" required><br>
 
-                <button type="submit">Modifier</button>
-            </form>
+                    <label>Confirmer le nouveau mot de passe :</label>
+                    <input type="password" name="confirm_password" required><br>
+
+                    <button type="submit">Modifier</button>
+                </form>
+            <?php else: ?>
+                <a href="../index.php" class="btn">Retour à l'accueil</a>
+            <?php endif; ?>
+
             <a href="logout.php">Déconnexion</a>
         </div>
     </div>
