@@ -115,6 +115,7 @@ $cart_count = count($_SESSION['cart']);
         </ul>
         <h2>Total: <?= number_format($total, 2); ?> €</h2>
         <a href="cart.php?clear=true" class="btn">🗑 Vider le panier</a>
+        <a href="../pages/checkout.php" class="btn">Acheter</a>
     <?php endif; ?>
 </section>
 

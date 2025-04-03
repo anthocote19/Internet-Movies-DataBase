@@ -4,14 +4,14 @@ require_once '../config/database.php';
 
 $response = ['success' => false, 'message' => ''];
 
-// Vérification de la connexion de l'utilisateur
+
 if (!isset($_SESSION['user_id'])) {
     $response['message'] = "Vous devez être connecté pour ajouter un film au panier.";
     echo json_encode($response);
     exit();
 }
 
-// Initialiser le panier si non défini
+
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }

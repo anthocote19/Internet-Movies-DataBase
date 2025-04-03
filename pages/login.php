@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
 
-            // Générer les initiales (prend la première lettre du prénom + première lettre du nom)
+           
             $name_parts = explode(" ", trim($user['username']));
             $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
             $_SESSION['initiales'] = $initiales;

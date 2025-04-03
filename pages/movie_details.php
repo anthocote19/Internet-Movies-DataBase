@@ -78,7 +78,7 @@ $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
         <p><strong>Acteurs:</strong> <?= $actors; ?></p>
         <p><strong>Prix:</strong> <?= number_format((float)$price, 2); ?> €</p>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="cart.php?add=<?= $movie_id; ?>" class="btn">🛒 Ajouter au panier</a>
+            <a href="cart.php?add=<?= $movie_id; ?>" class="btn"> Ajouter au panier</a>
         <?php else: ?>
             <p style="color: red; font-weight: bold;">Connectez-vous pour ajouter le film au panier.</p>
         <?php endif; ?>

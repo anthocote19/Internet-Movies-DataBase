@@ -176,7 +176,7 @@ h1 {
     box-shadow: 0 0 15px #ff0000;
 }
 
-/* 🎭 Effet glitch */
+
 @keyframes glitch {
     0% { text-shadow: 2px 2px #00c3ff, -2px -2px #008cff; }
     50% { text-shadow: -2px -2px #00c3ff, 2px 2px #008cff; }
@@ -187,7 +187,6 @@ h1 {
     animation: glitch 0.8s infinite alternate;
 }
 
-/* 🟢 Responsive */
 @media (max-width: 768px) {
     .cart-items li {
         flex-direction: column;
