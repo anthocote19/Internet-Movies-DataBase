@@ -7,24 +7,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     if (!empty($email) && !empty($password)) {
-        $query = "SELECT * FROM users WHERE email = :email";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-
-           
-            $name_parts = explode(" ", trim($user['username']));
-            $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
-            $_SESSION['initiales'] = $initiales;
-
-            header("Location: ../index.php");
-            exit();
+        // Validation de l'email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Format d'email invalide.";
         } else {
-            $error = "Email ou mot de passe incorrect.";
+            $query = "SELECT * FROM users WHERE email = :email";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = htmlspecialchars($user['username']);
+
+                // Initiales de l'utilisateur
+                $name_parts = explode(" ", trim($user['username']));
+                $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
+                $_SESSION['initiales'] = $initiales;
+
+                // Charger le panier depuis la base de données
+                $_SESSION['cart'] = [];
+                $stmt = $pdo->prepare("SELECT movie_id, quantity FROM cart WHERE user_id = ?");
+                $stmt->execute([$user['id']]);
+                $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($cart_items as $item) {
+                    $_SESSION['cart'][$item['movie_id']] = $item['quantity'];
+                }
+
+                header("Location: ../index.php");
+                exit();
+            } else {
+                $error = "Email ou mot de passe incorrect.";
+            }
         }
     } else {
         $error = "Veuillez remplir tous les champs.";
@@ -38,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="login.css?v=<?php echo time(); ?>">
 </head>
 <body>
 

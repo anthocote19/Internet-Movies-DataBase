@@ -62,7 +62,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <h2>Derniers Films Ajoutés</h2>
     <div class="movies-container">
         <?php
-        $query = "SELECT id, title, price, image FROM movies ORDER BY RAND() LIMIT 5";
+        $query = "SELECT id, title, price, image, trailer_url FROM movies ORDER BY RAND() LIMIT 5";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -70,16 +70,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $title = htmlspecialchars($row['title']);
             $price = htmlspecialchars($row['price']);
             $image = htmlspecialchars($row['image']);
+            $trailer_url = htmlspecialchars($row['trailer_url'] ?? '');
+
+
             echo "
                 <div class='movie-card'>
                     <img src='assets/images/$image' alt='$title'>
                     <h3>$title</h3>
                     <p>$price €</p>
                     <a href='pages/movie_details.php?id=$id' class='btn'>Voir Détails</a>
-                    <button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>
-                    <a href='pages/movie_details.php?id=$id' class='btn'>Voir le trailer de ce film</a>
-                </div>
-            ";
+                    <button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
+            
+            if (!empty($trailer_url)) {
+                echo "<a href='$trailer_url' target='_blank' class='btn'>Voir le trailer</a>";
+            } else {
+                echo "<button class='btn' disabled>Aucun trailer</button>";
+            }
+
+            echo "</div>";
         }
         ?>
     </div>
@@ -99,6 +107,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     document.querySelector('.menu-toggle').addEventListener('click', () => {
         document.querySelector('.nav-links').classList.toggle('active');
     });
+
     $(document).ready(function() {
         $(".add-to-cart").click(function() {
             var movieId = $(this).data("id");
@@ -138,8 +147,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     .hidden { display: none; }
 </style>
-<br>
-<br>
+
+<br><br>
 <?php include 'includes/footer.php'; ?>
 
 </body>

@@ -7,26 +7,57 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
+// Vérifier si l'utilisateur est connecté
+$user_id = $_SESSION['user_id'] ?? null;
+
 // Ajouter un film au panier
 if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     $movie_id = intval($_GET['add']);
-    if (!in_array($movie_id, $_SESSION['cart'])) {
-        $_SESSION['cart'][] = $movie_id;
+
+    if ($user_id) {
+        // Vérifier si l'article existe déjà dans le panier
+        $stmt = $pdo->prepare("SELECT quantity FROM cart WHERE user_id = ? AND movie_id = ?");
+        $stmt->execute([$user_id, $movie_id]);
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($existing) {
+            $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + 1 WHERE user_id = ? AND movie_id = ?");
+            $stmt->execute([$user_id, $movie_id]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO cart (user_id, movie_id, quantity, added_at) VALUES (?, ?, 1, NOW())");
+            $stmt->execute([$user_id, $movie_id]);
+        }
+    } else {
+        $_SESSION['cart'][$movie_id] = ($_SESSION['cart'][$movie_id] ?? 0) + 1;
     }
+
     header("Location: cart.php");
     exit();
 }
 
 // Supprimer un film du panier
 if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
-    $_SESSION['cart'] = array_diff($_SESSION['cart'], [intval($_GET['remove'])]);
+    $movie_id = intval($_GET['remove']);
+
+    if ($user_id) {
+        $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ? AND movie_id = ?");
+        $stmt->execute([$user_id, $movie_id]);
+    } else {
+        unset($_SESSION['cart'][$movie_id]);
+    }
+
     header("Location: cart.php");
     exit();
 }
 
 // Vider le panier
 if (isset($_GET['clear'])) {
+    if ($user_id) {
+        $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+    }
     $_SESSION['cart'] = [];
+
     header("Location: cart.php");
     exit();
 }
@@ -35,27 +66,55 @@ if (isset($_GET['clear'])) {
 $movies = [];
 $total = 0;
 
-if (!empty($_SESSION['cart'])) {
-    // Filtrer les IDs pour éviter tout problème
-    $cart_ids = array_filter($_SESSION['cart'], 'is_numeric');
-    
-    if (!empty($cart_ids)) { // Vérifier si après filtrage il y a bien des IDs
-        $placeholders = implode(',', array_fill(0, count($cart_ids), '?'));
-        $query = "SELECT * FROM movies WHERE id IN ($placeholders)";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute(array_values($cart_ids)); // S'assurer que c'est bien un tableau indexé
-        $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+if ($user_id) {
+    // Charger le panier depuis la base de données
+    $stmt = $pdo->prepare("SELECT movies.*, cart.quantity FROM cart 
+                           JOIN movies ON cart.movie_id = movies.id 
+                           WHERE cart.user_id = ?");
+    $stmt->execute([$user_id]);
+    $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Si des articles sont également présents dans $_SESSION['cart'], les ajouter
+    if (!empty($_SESSION['cart'])) {
+        $cart_ids = array_keys($_SESSION['cart']);
+        if (!empty($cart_ids)) {
+            $placeholders = implode(',', array_fill(0, count($cart_ids), '?'));
+            $stmt = $pdo->prepare("SELECT * FROM movies WHERE id IN ($placeholders)");
+            $stmt->execute($cart_ids);
+            $sessionMovies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($sessionMovies as $sessionMovie) {
+                $sessionMovie['quantity'] = $_SESSION['cart'][$sessionMovie['id']] ?? 1;
+                $movies[] = $sessionMovie; // Ajouter au panier global
+            }
+        }
     }
-    
-    // Calcul du total
-    foreach ($movies as $movie) {
-        $total += $movie['price'];
+} else {
+    // Charger le panier depuis la session uniquement
+    if (!empty($_SESSION['cart'])) {
+        $cart_ids = array_keys($_SESSION['cart']);
+        if (!empty($cart_ids)) {
+            $placeholders = implode(',', array_fill(0, count($cart_ids), '?'));
+            $stmt = $pdo->prepare("SELECT * FROM movies WHERE id IN ($placeholders)");
+            $stmt->execute($cart_ids);
+            $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($movies as &$movie) {
+                $movie['quantity'] = $_SESSION['cart'][$movie['id']] ?? 1;
+            }
+        }
     }
 }
 
 
+// Calcul du total
+foreach ($movies as $movie) {
+    $total += $movie['price'] * $movie['quantity'];
+}
+
 $initiale = isset($_SESSION['username']) ? strtoupper($_SESSION['username'][0]) : '?';
-$cart_count = count($_SESSION['cart']);
+$cart_count = array_sum(array_column($movies, 'quantity'));
+
 ?>
 
 <!DOCTYPE html>
@@ -77,9 +136,9 @@ $cart_count = count($_SESSION['cart']);
         <ul class="nav-links">
             <li><a href="../index.php">Accueil</a></li>
             <li><a href="../pages/categories.php">Catégories</a></li>
-            <?php if (isset($_SESSION['user_id'])): ?>
+            <?php if ($user_id): ?>
                 <li class="dropdown">
-                    <span class="user-initials"> <?= $initiale; ?> </span>
+                    <span class="user-initials"> <?= htmlspecialchars($initiale); ?> </span>
                     <ul class="dropdown-menu">
                         <li><a href="../pages/profile.php">Consulter mon profil</a></li>
                         <li><a href="cart.php">Voir mon panier (<span id="cart-count"><?= $cart_count; ?></span>)</a></li>
@@ -93,9 +152,9 @@ $cart_count = count($_SESSION['cart']);
         </ul>
     </nav>
 </header>
-<br>
-<br>
-<br>
+
+<br><br><br>
+
 <section class="cart">
     <h1>Votre Panier</h1>
     <?php if (empty($movies)): ?>
@@ -108,6 +167,7 @@ $cart_count = count($_SESSION['cart']);
                     <div>
                         <h3><?= htmlspecialchars($movie['title']); ?></h3>
                         <p>Prix: <?= htmlspecialchars($movie['price']); ?> €</p>
+                        <p>Quantité: <?= htmlspecialchars($movie['quantity']); ?></p>
                         <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">❌ Retirer</a>
                     </div>
                 </li>
@@ -126,8 +186,6 @@ $cart_count = count($_SESSION['cart']);
         });
     });
 </script>
-
-
 
 </body>
 </html>
