@@ -18,7 +18,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">Anthony & Tiago's Movies</a>
+            <a href="index.php">Anthony's & Tiago's Movies</a>
         </div>
         <ul class="nav-links">
             <li><a href="index.php" class="<?= ($current_page == 'index.php') ? 'active' : '' ?>">Accueil</a></li>
@@ -27,8 +27,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <li class="dropdown">
                     <span class="user-initials"><?= $_SESSION['initiales']; ?></span>
                     <ul class="dropdown-menu">
-                        <li><a href="pages/profile.php"> Mon Profil</a></li>
-                        <li><a href="pages/cart.php">Voir mon panier (<span id="cart-count"><?= count($_SESSION['cart'] ?? []) ?></span>)</a></li>
+                        <li><a href="pages/profile.php">Mon Profil</a></li>
+                        <li><a href="pages/cart.php">Voir mon panier (<span id="cart-count">
+                            <?php
+                            $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ?");
+                            $stmt->execute([$_SESSION['user_id']]);
+                            echo $stmt->fetchColumn() ?? 0;
+                            ?>
+                        </span>)</a></li>
                         <li><a href="pages/dashboard.php">Changer mot de passe</a></li>
                         <li><a href="pages/logout.php">Déconnexion</a></li>
                     </ul>
@@ -71,7 +77,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $price = htmlspecialchars($row['price']);
             $image = htmlspecialchars($row['image']);
             $trailer_url = htmlspecialchars($row['trailer_url'] ?? '');
-
 
             echo "
                 <div class='movie-card'>
@@ -119,9 +124,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 dataType: "json",
                 success: function(response) {
                     $("#cart-message").text(response.message).fadeIn().delay(1500).fadeOut();
-                    if (response.success) {
-                        var currentCount = parseInt($("#cart-count").text());
-                        $("#cart-count").text(currentCount + 1);
+                    if (response.success && response.total !== undefined) {
+                        $("#cart-count").text(response.total);
                     }
                 },
                 error: function() {

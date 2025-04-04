@@ -12,17 +12,25 @@ $user_id = $_SESSION['user_id'];
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("INSERT INTO purchases (user_id, movie_id, purchase_date) VALUES (:user_id, :movie_id, NOW())");
+    $stmt = $pdo->prepare("INSERT INTO purchases (user_id, movie_id, quantity, purchase_date) 
+                           VALUES (:user_id, :movie_id, :quantity, NOW())");
 
-    foreach ($_SESSION['cart'] as $movie_id) {
+    foreach ($_SESSION['cart'] as $movie_id => $quantity) {
         $stmt->execute([
             'user_id' => $user_id,
-            'movie_id' => $movie_id
+            'movie_id' => $movie_id,
+            'quantity' => $quantity
         ]);
     }
 
-    $pdo->commit(); 
+ 
     $_SESSION['cart'] = [];
+
+    
+    $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+
+    $pdo->commit(); 
 
 } catch (Exception $e) {
     $pdo->rollBack(); 
@@ -36,7 +44,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commande passée</title>
-    <link rel="stylesheet" href="chekout.css">
+    <link rel="stylesheet" href="checkout.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
