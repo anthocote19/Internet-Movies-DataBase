@@ -8,7 +8,7 @@ As always you will have to defend your project with a short presentation.
    
     
  
-2 - Features   
+2 - Features    
 Your project is to build a website your users to buy a video but also to search for a movie
 
 Here are the basics overview of the functionalities. Of course, quality and security are directly impacting your production
