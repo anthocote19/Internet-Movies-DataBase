@@ -2,12 +2,11 @@
 session_start();
 require_once '../config/database.php';
 
-$allowed_categories = ['action', 'drama', 'comedy']; // Catégories autorisées
+$categories_autorisees = ['action', 'drama'];
+$categorie = isset($_GET['cat']) ? strtolower(trim($_GET['cat'])) : null;
 
-$category = isset($_GET['cat']) ? strtolower(trim($_GET['cat'])) : '';
-
-if (!in_array($category, $allowed_categories)) {
-    $category = '';
+if (!in_array($categorie, $categories_autorisees)) {
+    $categorie = null;
 }
 ?>
 
@@ -17,87 +16,66 @@ if (!in_array($category, $allowed_categories)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catégories - Anthony & Tiago's Movies</title>
-    <link rel="stylesheet" href="categories.css">
+    <link rel="stylesheet" href="categories.css?v=1">
 </head>
 <body>
 
-<header>
-    <nav class="navbar">
-        <div class="logo">
-            <a href="../index.php">Anthony & Tiago's Movies</a>
-        </div>
-        <ul class="nav-links">
-            <li><a href="../index.php">Accueil</a></li>
-            <li><a href="categories.php">Catégories</a></li>
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <li class="dropdown">
-                    <span class="user-initials"><?= $_SESSION['initiales']; ?></span>
-                    <ul class="dropdown-menu">
-                        <li><a href="profile.php">Mon Profil</a></li>
-                        <li><a href="cart.php">Voir mon panier (<span id="cart-count"><?= count($_SESSION['cart'] ?? []) ?></span>)</a></li>
-                        <li><a href="dashboard.php">Changer mot de passe</a></li>
-                        <li><a href="logout.php">Déconnexion</a></li>
-                    </ul>
-                </li>
-            <?php else: ?>
-                <li><a href="login.php">Connexion</a></li>
-                <li><a href="register.php">Inscription</a></li>
-            <?php endif; ?>
-        </ul>
-        <button class="menu-toggle">☰</button>
-    </nav>
-</header>
-
-<br>
-<br>
-<br>
 <section class="category-section">
-    <h1>Films de la catégorie : <?php echo ucfirst($category); ?></h1>
-
-    <?php if (!$category): ?>
-        <p>Veuillez sélectionner une catégorie valide :</p>
+    <?php if ($categorie): ?>
+        <h1>Films de la catégorie : <?= ucfirst($categorie); ?></h1>
+    <?php else: ?>
+        <h1>Choisissez la catégorie qui vous convient le plus !</h1>
         <ul>
             <li><a href="categories.php?cat=action">Action</a></li>
             <li><a href="categories.php?cat=drama">Drame</a></li>
         </ul>
-    <?php else: ?>
-        <div class="movies-container">
-            <?php
-            try {
-                $query = "SELECT id, title, price, image FROM movies WHERE category = :category ORDER BY created_at DESC";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(':category', $category, PDO::PARAM_STR);
-                $stmt->execute();
-                $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    <?php endif; ?>
 
-                if (empty($movies)) {
+    <div class="movies-container">
+        <?php
+        if ($categorie) {
+            try {
+                $requete = "SELECT id, title, price, image FROM movies WHERE category = :categorie ORDER BY created_at DESC";
+                $stmt = $pdo->prepare($requete);
+                $stmt->bindParam(':categorie', $categorie, PDO::PARAM_STR);
+                $stmt->execute();
+                $films = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if (!$films) {
                     echo "<p>Aucun film trouvé dans cette catégorie.</p>";
                 } else {
-                    foreach ($movies as $row) {
-                        $id = htmlspecialchars($row['id']);
-                        $title = htmlspecialchars($row['title']);
-                        $price = htmlspecialchars($row['price']);
-                        $image = htmlspecialchars($row['image']);
+                    foreach ($films as $film) {
+                        $id = htmlspecialchars($film['id']);
+                        $titre = htmlspecialchars($film['title']);
+                        $prix = htmlspecialchars($film['price']);
+                        $image = htmlspecialchars($film['image']);
+
                         echo "
                             <div class='movie-card'>
-                                <img src='../assets/images/$image' alt='$title'>
-                                <h3>$title</h3>
-                                <p>$price €</p>
-                                <a href='movie_details.php?id=$id' class='btn'>Voir Détails</a>
-                                <a href='cart.php?add=$id' class='btn'>Ajouter au panier</a>
-                            </div>
-                        ";
+                                <img src='../assets/images/$image' alt='$titre'>
+                                <h3>$titre</h3>
+                                <p>$prix €</p>
+                                <a href='movie_details.php?id=$id' class='btn'>Voir Détails</a>";
+                        
+                        if (isset($_SESSION['user_id'])) {
+                            echo "<a href='cart.php?add=$id' class='btn'>Ajouter au panier</a>";
+                        } else {
+                            echo "<p class='not-logged'><a href='login.php'>Connectez-vous</a> pour ajouter au panier</p>";
+                        }
+
+                        echo "</div>";
                     }
                 }
             } catch (PDOException $e) {
-                echo "<p>Erreur de base de données : " . $e->getMessage() . "</p>";
+                echo "<p>Erreur lors de la récupération des films : " . htmlspecialchars($e->getMessage()) . "</p>";
             }
-            ?>
-        </div>
-    <?php endif; ?>
-</section>
+        }
+        ?>
+    </div>
 
-<?php include '../includes/footer.php'; ?>
+    <br><br><br><br>
+    <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+</section>
 
 </body>
 </html>

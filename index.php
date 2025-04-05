@@ -11,20 +11,34 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anthony's and Tiago's Movies</title>
     <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo time(); ?>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">Anthony & Tiago's Movies</a>
+            <a href="index.php">Anthony's & Tiago's Movies</a>
         </div>
         <ul class="nav-links">
             <li><a href="index.php" class="<?= ($current_page == 'index.php') ? 'active' : '' ?>">Accueil</a></li>
             <li><a href="pages/categories.php" class="<?= ($current_page == 'categories.php') ? 'active' : '' ?>">Catégories</a></li>
             <?php if (isset($_SESSION['user_id'])): ?>
-                <li><a href="pages/profile.php" class="<?= ($current_page == 'profile.php') ? 'active' : '' ?>">Mon Profil</a></li>
-                <li><a href="pages/logout.php">Déconnexion</a></li>
+                <li class="dropdown">
+                    <span class="user-initials"><?= $_SESSION['initiales']; ?></span>
+                    <ul class="dropdown-menu">
+                        <li><a href="pages/profile.php">Mon Profil</a></li>
+                        <li><a href="pages/cart.php">Voir mon panier (<span id="cart-count">
+                            <?php
+                            $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ?");
+                            $stmt->execute([$_SESSION['user_id']]);
+                            echo $stmt->fetchColumn() ?? 0;
+                            ?>
+                        </span>)</a></li>
+                        <li><a href="pages/dashboard.php">Changer mot de passe</a></li>
+                        <li><a href="pages/logout.php">Déconnexion</a></li>
+                    </ul>
+                </li>
             <?php else: ?>
                 <li><a href="pages/login.php" class="<?= ($current_page == 'login.php') ? 'active' : '' ?>">Connexion</a></li>
                 <li><a href="pages/register.php" class="<?= ($current_page == 'register.php') ? 'active' : '' ?>">Inscription</a></li>
@@ -54,7 +68,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <h2>Derniers Films Ajoutés</h2>
     <div class="movies-container">
         <?php
-        $query = "SELECT id, title, price, image FROM movies ORDER BY RAND() LIMIT 5";
+        $query = "SELECT id, title, price, image, trailer_url FROM movies ORDER BY RAND() LIMIT 5";
         $stmt = $pdo->prepare($query);
         $stmt->execute();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -62,15 +76,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $title = htmlspecialchars($row['title']);
             $price = htmlspecialchars($row['price']);
             $image = htmlspecialchars($row['image']);
+            $trailer_url = htmlspecialchars($row['trailer_url'] ?? '');
+
             echo "
                 <div class='movie-card'>
                     <img src='assets/images/$image' alt='$title'>
                     <h3>$title</h3>
                     <p>$price €</p>
                     <a href='pages/movie_details.php?id=$id' class='btn'>Voir Détails</a>
-                    <a href='pages/cart.php?add=$id' class='btn'>Ajouter au panier</a>
-                </div>
-            ";
+                    <button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
+            
+            if (!empty($trailer_url)) {
+                echo "<a href='$trailer_url' target='_blank' class='btn'>Voir le trailer</a>";
+            } else {
+                echo "<button class='btn' disabled>Aucun trailer</button>";
+            }
+
+            echo "</div>";
         }
         ?>
     </div>
@@ -79,19 +101,58 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <section class="categories">
     <h2>Nos Catégories</h2>
     <div class="category-list">
-        <a href="pages/categories.php?cat=comedy" class="category-card comedy">Comédie</a>
         <a href="pages/categories.php?cat=action" class="category-card action">Action</a>
         <a href="pages/categories.php?cat=drama" class="category-card drama">Drame</a>
     </div>
 </section>
 
+<div id="cart-message" class="hidden"></div>
+
 <script>
     document.querySelector('.menu-toggle').addEventListener('click', () => {
         document.querySelector('.nav-links').classList.toggle('active');
     });
+
+    $(document).ready(function() {
+        $(".add-to-cart").click(function() {
+            var movieId = $(this).data("id");
+
+            $.ajax({
+                url: "pages/ajax.php",
+                type: "POST",
+                data: { movie_id: movieId },
+                dataType: "json",
+                success: function(response) {
+                    $("#cart-message").text(response.message).fadeIn().delay(1500).fadeOut();
+                    if (response.success && response.total !== undefined) {
+                        $("#cart-count").text(response.total);
+                    }
+                },
+                error: function() {
+                    $("#cart-message").text("Erreur lors de l'ajout au panier.").fadeIn().delay(1500).fadeOut();
+                }
+            });
+        });
+    });
 </script>
-<br>
-<br>
+
+<style>
+    #cart-message {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+        z-index: 1000;
+    }
+    .hidden { display: none; }
+</style>
+
+<br><br>
 <?php include 'includes/footer.php'; ?>
 
 </body>

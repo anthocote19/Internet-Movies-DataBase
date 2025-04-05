@@ -9,6 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $movie_id = intval($_GET['id']);
 
+// Récupérer les infos du film
 $query = "SELECT * FROM movies WHERE id = :id";
 $stmt = $pdo->prepare($query);
 $stmt->execute(['id' => $movie_id]);
@@ -21,9 +22,18 @@ if (!$movie) {
 
 $title = htmlspecialchars($movie['title'] ?? 'Titre inconnu');
 $director = htmlspecialchars($movie['director'] ?? 'Non renseigné');
-$actors = htmlspecialchars($movie['actors'] ?? 'Non renseigné');
 $price = htmlspecialchars($movie['price'] ?? '0.00');
 $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
+
+// Récupérer tous les acteurs du film
+$query_actors = "SELECT actors.id, actors.name 
+                 FROM actors 
+                 INNER JOIN movie_actor ON actors.id = movie_actor.actor_id 
+                 WHERE movie_actor.movie_id = :movie_id";
+
+$stmt_actors = $pdo->prepare($query_actors);
+$stmt_actors->execute(['movie_id' => $movie_id]);
+$actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +45,9 @@ $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
     <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
 </head>
 <body>
+
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -75,10 +88,22 @@ $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
         <h1><?= $title; ?></h1>
         <img src="../assets/images/<?= $image; ?>" alt="<?= $title; ?>">
         <p><strong>Réalisateur:</strong> <a href="director_movies.php?director=<?= urlencode($director); ?>"><?= $director; ?></a></p>
-        <p><strong>Acteurs:</strong> <?= $actors; ?></p>
+        
+        <p><strong>Acteurs:</strong>
+            <?php if (!empty($actors)): ?>
+                <?php foreach ($actors as $actor): ?>
+                    <a href="actor_movies.php?actor_id=<?= $actor['id']; ?>"><?= htmlspecialchars($actor['name']); ?></a>
+                    <?= $actor !== end($actors) ? ', ' : ''; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                Non renseigné
+            <?php endif; ?>
+        </p>
+
         <p><strong>Prix:</strong> <?= number_format((float)$price, 2); ?> €</p>
+        
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="cart.php?add=<?= $movie_id; ?>" class="btn">🛒 Ajouter au panier</a>
+            <a href="cart.php?add=<?= $movie_id; ?>" class="btn"> Ajouter au panier</a>
         <?php else: ?>
             <p style="color: red; font-weight: bold;">Connectez-vous pour ajouter le film au panier.</p>
         <?php endif; ?>
@@ -94,8 +119,7 @@ $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
 <br>
 <br>
 <br>
-<br>
-<br>
+
 <?php include '../includes/footer.php'; ?>
 
 </body>
