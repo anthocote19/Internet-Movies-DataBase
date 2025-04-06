@@ -129,7 +129,7 @@ body {
     color: #0f2027;
 }
 
-/* BOUTON RETOUR */
+
 .back-btn {
     margin-top: 3rem;
     padding: 1rem 2rem;
@@ -141,6 +141,18 @@ body {
     text-decoration: none;
     transition: all 0.3s ease;
 }
+.back-btn-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.back-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
 
 .back-btn:hover {
     background: #00ffff;
