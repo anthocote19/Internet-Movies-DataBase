@@ -13,14 +13,14 @@ $user_id = $_SESSION['user_id'] ?? null;
 if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     $movie_id = intval($_GET['add']);
     if ($user_id) {
-        $stmt = $pdo->prepare("SELECT quantity FROM cart WHERE user_id = ? AND movie_id = ?");
+        $stmt = $pdo->prepare("SELECT quantity FROM cart WHERE user_id = ? AND movie_id = ? AND is_active = 1");
         $stmt->execute([$user_id, $movie_id]);
         $existing = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($existing) {
-            $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + 1 WHERE user_id = ? AND movie_id = ?");
+            $stmt = $pdo->prepare("UPDATE cart SET quantity = quantity + 1 WHERE user_id = ? AND movie_id = ? AND is_active = 1");
             $stmt->execute([$user_id, $movie_id]);
         } else {
-            $stmt = $pdo->prepare("INSERT INTO cart (user_id, movie_id, quantity, added_at) VALUES (?, ?, 1, NOW())");
+            $stmt = $pdo->prepare("INSERT INTO cart (user_id, movie_id, quantity, added_at, is_active) VALUES (?, ?, 1, NOW(), 1)");
             $stmt->execute([$user_id, $movie_id]);
         }
     } else {
@@ -30,11 +30,10 @@ if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     exit();
 }
 
-// Supprimer un film
 if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     $movie_id = intval($_GET['remove']);
     if ($user_id) {
-        $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ? AND movie_id = ?");
+        $stmt = $pdo->prepare("UPDATE cart SET is_active = 0 WHERE user_id = ? AND movie_id = ?");
         $stmt->execute([$user_id, $movie_id]);
     } else {
         unset($_SESSION['cart'][$movie_id]);
@@ -43,10 +42,10 @@ if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     exit();
 }
 
-// Vider le panier
+
 if (isset($_GET['clear'])) {
     if ($user_id) {
-        $stmt = $pdo->prepare("DELETE FROM cart WHERE user_id = ?");
+        $stmt = $pdo->prepare("UPDATE cart SET is_active = 0 WHERE user_id = ?");
         $stmt->execute([$user_id]);
     }
     $_SESSION['cart'] = [];
@@ -54,14 +53,14 @@ if (isset($_GET['clear'])) {
     exit();
 }
 
-// Récupérer les films
+
 $movies = [];
 $total = 0;
 
 if ($user_id) {
     $stmt = $pdo->prepare("SELECT movies.*, cart.quantity FROM cart 
                            JOIN movies ON cart.movie_id = movies.id 
-                           WHERE cart.user_id = ?");
+                           WHERE cart.user_id = ? AND cart.is_active = 1");
     $stmt->execute([$user_id]);
     $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
@@ -79,7 +78,7 @@ if ($user_id) {
     }
 }
 
-// Total
+
 foreach ($movies as $movie) {
     $total += $movie['price'] * $movie['quantity'];
 }
@@ -102,11 +101,7 @@ foreach ($movies as $movie) {
     <h1>Votre Panier</h1>
     <?php if (empty($movies)): ?>
         <p>Votre panier est vide.</p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <br><br><br><br><br>
         <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
     <?php else: ?>
         <ul class="cart-items">
@@ -117,17 +112,16 @@ foreach ($movies as $movie) {
                         <h3><?= htmlspecialchars($movie['title']); ?></h3>
                         <p>Prix: <?= htmlspecialchars($movie['price']); ?> €</p>
                         <p>Quantité: <?= htmlspecialchars($movie['quantity']); ?></p>
-                        <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn"> Retirer le film</a>
+                        <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">Retirer le film</a>
                     </div>
                 </li>
             <?php endforeach; ?>
         </ul>
         <h2>Total: <?= number_format($total, 2); ?> €</h2>
-        <a href="cart.php?clear=true" class="btn">🗑 Vider le panier</a>
+        <a href="cart.php?clear=true" class="btn">Vider le panier</a>
         <form method="POST" action="checkout.php" style="display:inline;">
-    <button type="submit" class="btn">Acheter</button>
-</form>
-
+            <button type="submit" class="btn">Acheter</button>
+        </form>
         <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
     <?php endif; ?>
 </section>

@@ -74,7 +74,12 @@ if (!in_array($categorie, $categories_autorisees)) {
     </div>
 
     <br><br><br><br>
+    <div class="back-btn-wrapper">
     <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+</div>
+
+</div>
+
 </section>
 
 
