@@ -58,7 +58,7 @@ if (!in_array($categorie, $categories_autorisees)) {
                                 <a href='movie_details.php?id=$id' class='btn'>Voir Détails</a>";
                         
                         if (isset($_SESSION['user_id'])) {
-                            echo "<a href='cart.php?add=$id' class='btn'>Ajouter au panier</a>";
+                            echo "<button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
                         } else {
                             echo "<p class='not-logged'><a href='login.php'>Connectez-vous</a> pour ajouter au panier</p>";
                         }
@@ -76,6 +76,38 @@ if (!in_array($categorie, $categories_autorisees)) {
     <br><br><br><br>
     <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
 </section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.add-to-cart');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const movieId = this.getAttribute('data-id');
+
+            fetch('ajax.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `movie_id=${movieId}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message + " (Total dans le panier : " + data.total + ")");
+                } else {
+                    alert("Erreur : " + data.message);
+                }
+            })
+            .catch(error => {
+                alert("Erreur lors de l'ajout : " + error);
+            });
+        });
+    });
+});
+</script>
 
 </body>
 </html>

@@ -2,6 +2,8 @@
 session_start();
 require_once '../config/database.php';
 
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
@@ -9,21 +11,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
     if (!empty($username) && !empty($email) && !empty($password)) {
-        $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
-        $stmt = $pdo->prepare($query);
-        if ($stmt->execute(['username' => $username, 'email' => $email, 'password' => $password_hash])) {
+        try {
+            $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([
+                'username' => $username,
+                'email' => $email,
+                'password' => $password_hash
+            ]);
+
             $_SESSION['user_id'] = $pdo->lastInsertId();
             $_SESSION['username'] = $username;
 
-           
             $name_parts = explode(" ", trim($username));
             $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
             $_SESSION['initiales'] = $initiales;
 
             header("Location: ../index.php");
             exit();
-        } else {
-            $error = "Erreur lors de l'inscription.";
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $error = " Nom d'utilisateur déjà pris, veuillez en choisir un autre.";
+            } else {
+                $error = "Erreur lors de l'inscription : " . $e->getMessage();
+            }
         }
     } else {
         $error = "Tous les champs sont obligatoires.";
@@ -50,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" placeholder="Mot de passe" required>
             <button type="submit">S'inscrire</button>
         </form>
+
         <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
 
         <?php if (!isset($_SESSION['user_id'])): ?>

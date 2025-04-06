@@ -150,3 +150,95 @@ h1 {
         margin-bottom: 10px;
     }
 }
+
+/* 🌐 Responsive design amélioré */
+@media (max-width: 1024px) {
+    .cart {
+        padding: 25px;
+        margin: 80px 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .btn, .btn-danger {
+        font-size: 16px;
+        padding: 10px 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart {
+        padding: 20px;
+        margin: 60px 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .cart-items li {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 12px;
+    }
+
+    .cart-items img {
+        width: 70px;
+        height: 90px;
+        margin-bottom: 10px;
+    }
+
+    .cart-items h3 {
+        font-size: 16px;
+    }
+
+    .cart-items p {
+        font-size: 14px;
+    }
+
+    .btn, .btn-danger {
+        font-size: 14px;
+        padding: 10px 16px;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .back-btn {
+        width: 100%;
+        max-width: 300px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart {
+        padding: 15px;
+        margin: 40px 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .cart-items img {
+        width: 60px;
+        height: 80px;
+    }
+
+    .cart-items h3 {
+        font-size: 15px;
+    }
+
+    .cart-items p {
+        font-size: 13px;
+    }
+
+    .btn, .btn-danger, .back-btn {
+        font-size: 13px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+}
