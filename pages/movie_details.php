@@ -25,7 +25,7 @@ $director = htmlspecialchars($movie['director'] ?? 'Non renseigné');
 $price = htmlspecialchars($movie['price'] ?? '0.00');
 $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
 
-// Récupérer tous les acteurs du film
+// Récupérer les acteurs
 $query_actors = "SELECT actors.id, actors.name 
                  FROM actors 
                  INNER JOIN movie_actor ON actors.id = movie_actor.actor_id 
@@ -45,7 +45,6 @@ $actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
 </head>
 <body>
-
 <br>
 <br>
 <br>
@@ -79,7 +78,7 @@ $actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="register.php">Inscription</a></li>
             <?php endif; ?>
         </ul>
-        <button class="menu-toggle">☰</button>
+        <button class="menu-toggle" aria-label="Ouvrir le menu">☰</button>
     </nav>
 </header>
 
@@ -87,23 +86,22 @@ $actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <h1><?= $title; ?></h1>
         <img src="../assets/images/<?= $image; ?>" alt="<?= $title; ?>">
-        <p><strong>Réalisateur:</strong> <a href="director_movies.php?director=<?= urlencode($director); ?>"><?= $director; ?></a></p>
+        <p><strong>Réalisateur :</strong> <a href="director_movies.php?director=<?= urlencode($director); ?>"><?= $director; ?></a></p>
         
-        <p><strong>Acteurs:</strong>
+        <p><strong>Acteurs :</strong>
             <?php if (!empty($actors)): ?>
-                <?php foreach ($actors as $actor): ?>
-                    <a href="actor_movies.php?actor_id=<?= $actor['id']; ?>"><?= htmlspecialchars($actor['name']); ?></a>
-                    <?= $actor !== end($actors) ? ', ' : ''; ?>
+                <?php foreach ($actors as $index => $actor): ?>
+                    <a href="actor_movies.php?actor_id=<?= $actor['id']; ?>"><?= htmlspecialchars($actor['name']); ?></a><?= $index < count($actors) - 1 ? ', ' : ''; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 Non renseigné
             <?php endif; ?>
         </p>
 
-        <p><strong>Prix:</strong> <?= number_format((float)$price, 2); ?> €</p>
+        <p><strong>Prix :</strong> <?= number_format((float)$price, 2); ?> €</p>
         
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="cart.php?add=<?= $movie_id; ?>" class="btn"> Ajouter au panier</a>
+            <a href="cart.php?add=<?= $movie_id; ?>" class="btn">Ajouter au panier</a>
         <?php else: ?>
             <p style="color: red; font-weight: bold;">Connectez-vous pour ajouter le film au panier.</p>
         <?php endif; ?>
@@ -111,14 +109,22 @@ $actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
 </section>
 
 <script>
-    document.querySelector('.menu-toggle').addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.toggle('active');
+    const toggleBtn = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    toggleBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('menu-active');
+    });
+
+    
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('menu-active');
+        });
     });
 </script>
-<br>
-<br>
-<br>
-<br>
+
+
 
 <?php include '../includes/footer.php'; ?>
 

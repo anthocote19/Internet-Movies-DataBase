@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
             if ($stmt->execute([$hashed_password, $user_id])) {
                 $message = "Mot de passe mis à jour avec succès.";
-                $password_updated = true; // Le mot de passe a été changé
+                $password_updated = true; 
             } else {
                 $message = "Une erreur est survenue, veuillez réessayer.";
             }
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changer le mot de passe</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboard.css?v=<?php echo time(); ?>">
 </head>
 <body>
     <div class="page-wrapper">

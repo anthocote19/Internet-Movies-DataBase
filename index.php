@@ -129,6 +129,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 }
             });
         });
+
+    
+        $(".user-initials").on("click", function(e) {
+            e.stopPropagation();
+            $(this).siblings(".dropdown-menu").slideToggle();
+        });
+
+        $(document).on("click", function() {
+            $(".dropdown-menu").slideUp();
+        });
     });
 </script>
 

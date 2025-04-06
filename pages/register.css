@@ -1,35 +1,45 @@
-/* Conteneur principal pour centrer */
-.register-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #141e30, #243b55);
-}
-
-/* Conteneur du formulaire */
-.register-container {
+    color: #ffffff;
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    gap: 15px;
-    padding: 20px;
-}
-.error {
-    color: #e74c3c;
-    background-color: #fceae9;
-    border: 1px solid #e0b4b4;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 15px;
-    text-align: center;
-    font-weight: bold;
-}
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+ 
+  .register-wrapper {
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    background: black;
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 0 25px #00fff7;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+  
 
-/* Formulaire */
-form {
+  h2 {
+    color: #00fff7;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00fff7;
+  }
+  
+ 
+  form {
     background-color: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     padding: 40px;
@@ -39,17 +49,10 @@ form {
     max-width: 400px;
     box-sizing: border-box;
     text-align: center;
-}
+  }
+  
+  
 
-/* Titre */
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-/* Champs de saisie */
 input {
     width: 100%;
     padding: 12px;
@@ -57,20 +60,35 @@ input {
     border: none;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.2);
-    color: white;
+    color: black;
     font-size: 16px;
     transition: 0.3s;
 }
 
-/* Effet sur focus */
+
 input:focus {
     outline: none;
     background-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
+    color: #333333; 
 }
 
-/* Bouton */
-button {
+  
+  
+  .error {
+    color: #e74c3c;
+    background-color: #fceae9;
+    border: 1px solid #e0b4b4;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+    animation: shake 0.4s ease;
+  }
+  
+
+  button {
     width: 100%;
     padding: 12px;
     background: linear-gradient(135deg, #00c6ff, #0072ff);
@@ -81,23 +99,15 @@ button {
     font-size: 16px;
     font-weight: bold;
     transition: 0.3s;
-}
-
-/* Effet de survol */
-button:hover {
+  }
+  
+  button:hover {
     background: linear-gradient(135deg, #0072ff, #00c6ff);
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
-}
+  }
+  
 
-
-p {
-    color: #ff4d4d;
-    text-align: center;
-    font-weight: bold;
-}
-
-
-a {
+  a {
     display: block;
     text-align: center;
     margin-top: 15px;
@@ -105,10 +115,46 @@ a {
     text-decoration: none;
     font-weight: bold;
     transition: 0.3s;
-}
-
-
-a:hover {
+  }
+  
+  a:hover {
     text-decoration: underline;
     color: #0072ff;
-}
+  }
+  
+ 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+  }
+  
+  /* Responsive */
+  @media (max-width: 500px) {
+    .register-wrapper {
+      padding: 1.5rem;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    input, button {
+      font-size: 1rem;
+    }
+  }
+  
