@@ -17,6 +17,16 @@
     gap: 15px;
     padding: 20px;
 }
+.error {
+    color: #e74c3c;
+    background-color: #fceae9;
+    border: 1px solid #e0b4b4;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
 
 /* Formulaire */
 form {
@@ -79,14 +89,14 @@ button:hover {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.8);
 }
 
-/* Message d'erreur */
+
 p {
     color: #ff4d4d;
     text-align: center;
     font-weight: bold;
 }
 
-/* Lien d'inscription */
+
 a {
     display: block;
     text-align: center;
@@ -97,7 +107,7 @@ a {
     transition: 0.3s;
 }
 
-/* Effet de survol */
+
 a:hover {
     text-decoration: underline;
     color: #0072ff;

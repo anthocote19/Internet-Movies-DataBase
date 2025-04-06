@@ -3,14 +3,13 @@ session_start();
 require_once 'config/database.php';
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anthony's and Tiago's Movies</title>
-    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="assets/css/styles.css?v=<?= time(); ?>">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -20,6 +19,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="logo">
             <a href="index.php">Anthony's & Tiago's Movies</a>
         </div>
+        <button class="menu-toggle" aria-label="Menu mobile">☰</button>
         <ul class="nav-links">
             <li><a href="index.php" class="<?= ($current_page == 'index.php') ? 'active' : '' ?>">Accueil</a></li>
             <li><a href="pages/categories.php" class="<?= ($current_page == 'categories.php') ? 'active' : '' ?>">Catégories</a></li>
@@ -44,16 +44,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <li><a href="pages/register.php" class="<?= ($current_page == 'register.php') ? 'active' : '' ?>">Inscription</a></li>
             <?php endif; ?>
         </ul>
-        <button class="menu-toggle">☰</button>
     </nav>
 </header>
 
 <section class="hero">
     <h1>Bienvenue sur Anthony's and Tiago's Movies</h1>
     <p>Découvrez, recherchez et achetez vos films préférés en quelques clics.</p>
-    <video autoplay loop muted class="background-video">
-        <source src="assets/videos/trailer.mp4" type="video/mp4">
-    </video>
 </section>
 
 <section class="search">
@@ -110,7 +106,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <script>
     document.querySelector('.menu-toggle').addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.toggle('active');
+        document.querySelector('.nav-links').classList.toggle('menu-active');
     });
 
     $(document).ready(function() {
@@ -151,9 +147,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     .hidden { display: none; }
 </style>
-
 <br><br>
 <?php include 'includes/footer.php'; ?>
-
 </body>
 </html>

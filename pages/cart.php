@@ -124,7 +124,10 @@ foreach ($movies as $movie) {
         </ul>
         <h2>Total: <?= number_format($total, 2); ?> €</h2>
         <a href="cart.php?clear=true" class="btn">🗑 Vider le panier</a>
-        <a href="checkout.php" class="btn">Acheter</a>
+        <form method="POST" action="checkout.php" style="display:inline;">
+    <button type="submit" class="btn">Acheter</button>
+</form>
+
         <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
     <?php endif; ?>
 </section>
