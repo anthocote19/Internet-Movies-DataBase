@@ -149,5 +149,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </style>
 <br><br>
 <?php include 'includes/footer.php'; ?>
+<script src="./cart.js?v=<?= time(); ?>"></script>
+
 </body>
 </html>

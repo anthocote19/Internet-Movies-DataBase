@@ -123,7 +123,7 @@ foreach ($movies as $movie) {
             <?php endforeach; ?>
         </ul>
         <h2>Total: <?= number_format($total, 2); ?> €</h2>
-        <a href="cart.php?clear=true" class="btn">🗑 Vider le panier</a>
+        <a href="cart.php?clear=true" class="btn"> Vider le panier</a>
         <form method="POST" action="checkout.php" style="display:inline;">
     <button type="submit" class="btn">Acheter</button>
 </form>
