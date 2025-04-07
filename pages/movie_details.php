@@ -102,8 +102,9 @@ if (isset($_SESSION['user_id'])) {
         <p><strong>Acteurs :</strong>
             <?php if (!empty($actors)): ?>
                 <?php foreach ($actors as $index => $actor): ?>
-                    <a href="actor_movies.php?actor_id=<?= $actor['id']; ?>"><?= htmlspecialchars($actor['name']); ?></a><?= $index < count($actors) - 1 ? ', ' : ''; ?>
+                    <?= htmlspecialchars($actor['name']); ?><?= $index < count($actors) - 1 ? ', ' : ''; ?>
                 <?php endforeach; ?>
+
             <?php else: ?>
                 Non renseigné
             <?php endif; ?>
