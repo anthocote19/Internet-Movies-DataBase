@@ -2,14 +2,12 @@
 session_start();
 require_once '../config/database.php';
 
-// Initialiser le panier s'il n'existe pas
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
 $user_id = $_SESSION['user_id'] ?? null;
 
-// Ajouter un film
 if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     $movie_id = intval($_GET['add']);
     if ($user_id) {
@@ -30,7 +28,6 @@ if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     exit();
 }
 
-// Retirer un film
 if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     $movie_id = intval($_GET['remove']);
     if ($user_id) {
@@ -43,7 +40,6 @@ if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     exit();
 }
 
-// Vider le panier
 if (isset($_GET['clear'])) {
     if ($user_id) {
         $stmt = $pdo->prepare("UPDATE cart SET is_active = 0 WHERE user_id = ?");
@@ -54,7 +50,6 @@ if (isset($_GET['clear'])) {
     exit();
 }
 
-// Récupération des films dans le panier
 $movies = [];
 $total = 0.0;
 
@@ -73,7 +68,6 @@ if ($user_id) {
     if (!empty($cart_items)) {
         $movie_ids = array_keys($cart_items);
         $placeholders = implode(',', array_fill(0, count($movie_ids), '?'));
-
         $stmt = $pdo->prepare("SELECT * FROM movies WHERE id IN ($placeholders)");
         $stmt->execute($movie_ids);
         $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -88,7 +82,6 @@ foreach ($movies as $movie) {
     $total += floatval($movie['price']) * intval($movie['quantity']);
 }
 
-// Compte réel d'articles dans le panier
 $cart_count = 0;
 if ($user_id) {
     $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ? AND is_active = 1");
@@ -114,6 +107,9 @@ if ($user_id) {
         <div class="logo">
             <a href="../index.php">Anthony & Tiago's Movies</a>
         </div>
+
+        <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+
         <ul class="nav-links">
             <li><a href="../index.php">Accueil</a></li>
             <li><a href="categories.php">Catégories</a></li>
@@ -132,7 +128,6 @@ if ($user_id) {
                 <li><a href="register.php">Inscription</a></li>
             <?php endif; ?>
         </ul>
-        <button class="menu-toggle" aria-label="Ouvrir le menu">☰</button>
     </nav>
 </header>
 
@@ -159,7 +154,7 @@ if ($user_id) {
                 <?php endforeach; ?>
             </ul>
             <h2>Total: <?= number_format($total, 2); ?> €</h2>
-            <a href="cart.php?clear=true" class="btn">Vider le panier</a>
+            <a href="cart.php?clear=true" class="btn btn-danger">Vider le panier</a>
             <form method="POST" action="checkout.php" style="display:inline;">
                 <button type="submit" class="btn">Acheter</button>
             </form>
