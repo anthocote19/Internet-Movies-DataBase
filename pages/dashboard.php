@@ -1,14 +1,13 @@
 <?php
 session_start();
 require_once '../config/database.php'; 
-// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
 $message = "";
-$password_updated = false; // Variable pour savoir si le mot de passe a été changé
+$password_updated = false; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_password = trim($_POST['current_password']);
@@ -47,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changer le mot de passe</title>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="dashboard.css?v=<?php echo time(); ?>">
 </head>
 <body>

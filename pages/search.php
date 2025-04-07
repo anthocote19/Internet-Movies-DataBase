@@ -14,6 +14,7 @@ $movies = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats de Recherche</title>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="search.css?v=<?php echo time(); ?>">
 </head>
 <body>

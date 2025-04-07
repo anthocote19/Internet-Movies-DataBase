@@ -5,5 +5,7 @@
 </footer>
 
 
-<link rel="stylesheet" href="assets/css/styles.css?v=<?php echo time(); ?>">
+
+
+
 

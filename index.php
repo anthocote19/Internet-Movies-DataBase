@@ -28,13 +28,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <span class="user-initials"><?= $_SESSION['initiales']; ?></span>
                     <ul class="dropdown-menu">
                         <li><a href="pages/profile.php">Mon Profil</a></li>
-                        <li><a href="pages/cart.php">Voir mon panier (<span id="cart-count">
-                            <?php
-                            $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ?");
-                            $stmt->execute([$_SESSION['user_id']]);
-                            echo $stmt->fetchColumn() ?? 0;
-                            ?>
-                        </span>)</a></li>
+                        <li>
+                            <a href="pages/cart.php">
+                                Voir mon panier (<span id="cart-count">
+                                    <?php
+                                    $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL");
+                                    $stmt->execute([$_SESSION['user_id']]);
+                                    echo $stmt->fetchColumn() ?: 0;
+                                    ?>
+                                </span>)
+                            </a>
+                        </li>
                         <li><a href="pages/dashboard.php">Changer mot de passe</a></li>
                         <li><a href="pages/logout.php">Déconnexion</a></li>
                     </ul>
@@ -130,7 +134,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             });
         });
 
-    
+   
         $(".user-initials").on("click", function(e) {
             e.stopPropagation();
             $(this).siblings(".dropdown-menu").slideToggle();
@@ -139,6 +143,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
         $(document).on("click", function() {
             $(".dropdown-menu").slideUp();
         });
+
+        
+        $.get('pages/get_cart_count.php', function(response) {
+            if (response.total !== undefined) {
+                $("#cart-count").text(response.total);
+            }
+        }, 'json');
     });
 </script>
 
@@ -157,6 +168,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     .hidden { display: none; }
 </style>
+
 <br><br>
 <?php include 'includes/footer.php'; ?>
 <script src="./cart.js?v=<?= time(); ?>"></script>
