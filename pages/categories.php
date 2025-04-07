@@ -62,7 +62,7 @@ if (!in_array($categorie, $categories_autorisees)) {
                         if (isset($_SESSION['user_id'])) {
                             echo "<button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
                         } else {
-                            echo "<p class='not-logged'><a href='login.php'>Connectez-vous</a> pour ajouter au panier</p>";
+                            echo "<p class='not-logged'><a href='login.php'>Connectez-vous</a> pour ajouter ce film au panier</p>";
                         }
 
                         echo "</div>";

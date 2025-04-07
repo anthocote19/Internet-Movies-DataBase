@@ -149,6 +149,12 @@ if ($user_id) {
                             <p>Prix: <?= number_format($movie['price'], 2); ?> €</p>
                             <p>Quantité: <?= intval($movie['quantity']); ?></p>
                             <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">Retirer le film</a>
+
+                            <form method="POST" action="checkout.php" style="display:inline;">
+                                <input type="hidden" name="movie_id" value="<?= $movie['id']; ?>">
+                                <input type="hidden" name="quantity" value="<?= intval($movie['quantity']); ?>">
+                                <button type="submit" class="btn">Acheter ce film</button>
+                            </form>
                         </div>
                     </li>
                 <?php endforeach; ?>

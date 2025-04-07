@@ -109,3 +109,17 @@
     }
   }
   
+  .btn-retour {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-retour:hover {
+    background-color: #0056b3;
+}

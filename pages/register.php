@@ -67,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <?php if (!isset($_SESSION['user_id'])): ?>
             <a href="login.php">Déjà inscrit ? Connecte-toi</a>
+            <a href="../index.php">Ne pas s'inscrire ou se connecter ?</a>
         <?php endif; ?>
     </div>
 </div>
