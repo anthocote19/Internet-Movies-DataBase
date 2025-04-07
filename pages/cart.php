@@ -30,6 +30,7 @@ if (isset($_GET['add']) && is_numeric($_GET['add'])) {
     exit();
 }
 
+// Retirer un film
 if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     $movie_id = intval($_GET['remove']);
     if ($user_id) {
@@ -42,7 +43,7 @@ if (isset($_GET['remove']) && is_numeric($_GET['remove'])) {
     exit();
 }
 
-
+// Vider le panier
 if (isset($_GET['clear'])) {
     if ($user_id) {
         $stmt = $pdo->prepare("UPDATE cart SET is_active = 0 WHERE user_id = ?");
@@ -53,34 +54,48 @@ if (isset($_GET['clear'])) {
     exit();
 }
 
-
+// Récupération des films dans le panier
 $movies = [];
-$total = 0;
+$total = 0.0;
 
 if ($user_id) {
-    $stmt = $pdo->prepare("SELECT movies.*, cart.quantity FROM cart 
+    $stmt = $pdo->prepare("SELECT movies.*, cart.quantity 
+                           FROM cart 
                            JOIN movies ON cart.movie_id = movies.id 
                            WHERE cart.user_id = ? AND cart.is_active = 1");
     $stmt->execute([$user_id]);
     $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    if (!empty($_SESSION['cart'])) {
-        $cart_ids = array_keys($_SESSION['cart']);
-        if (!empty($cart_ids)) {
-            $placeholders = implode(',', array_fill(0, count($cart_ids), '?'));
-            $stmt = $pdo->prepare("SELECT * FROM movies WHERE id IN ($placeholders)");
-            $stmt->execute($cart_ids);
-            $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($movies as &$movie) {
-                $movie['quantity'] = $_SESSION['cart'][$movie['id']] ?? 1;
-            }
+    $cart_items = array_filter($_SESSION['cart'], function ($qty, $id) {
+        return is_numeric($id) && is_numeric($qty) && $qty > 0;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    if (!empty($cart_items)) {
+        $movie_ids = array_keys($cart_items);
+        $placeholders = implode(',', array_fill(0, count($movie_ids), '?'));
+
+        $stmt = $pdo->prepare("SELECT * FROM movies WHERE id IN ($placeholders)");
+        $stmt->execute($movie_ids);
+        $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($movies as &$movie) {
+            $movie['quantity'] = $cart_items[$movie['id']] ?? 1;
         }
     }
 }
 
-
 foreach ($movies as $movie) {
-    $total += $movie['price'] * $movie['quantity'];
+    $total += floatval($movie['price']) * intval($movie['quantity']);
+}
+
+// Compte réel d'articles dans le panier
+$cart_count = 0;
+if ($user_id) {
+    $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ? AND is_active = 1");
+    $stmt->execute([$user_id]);
+    $cart_count = (int)$stmt->fetchColumn();
+} else {
+    $cart_count = array_sum($_SESSION['cart'] ?? []);
 }
 ?>
 
@@ -88,43 +103,86 @@ foreach ($movies as $movie) {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panier</title>
-    <link rel="stylesheet" href="./cart.css?v=<?php echo time(); ?>">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="./cart.css?v=<?= time(); ?>">
 </head>
 <body>
 
-<br><br><br>
-
-<section class="cart">
-    <h1>Votre Panier</h1>
-    <?php if (empty($movies)): ?>
-        <p>Votre panier est vide.</p>
-        <br><br><br><br><br>
-        <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
-    <?php else: ?>
-        <ul class="cart-items">
-            <?php foreach ($movies as $movie): ?>
-                <li>
-                    <img src="../assets/images/<?= htmlspecialchars($movie['image']); ?>" alt="<?= htmlspecialchars($movie['title']); ?>">
-                    <div>
-                        <h3><?= htmlspecialchars($movie['title']); ?></h3>
-                        <p>Prix: <?= htmlspecialchars($movie['price']); ?> €</p>
-                        <p>Quantité: <?= htmlspecialchars($movie['quantity']); ?></p>
-                        <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">Retirer le film</a>
-                    </div>
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../index.php">Anthony & Tiago's Movies</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.php">Accueil</a></li>
+            <li><a href="categories.php">Catégories</a></li>
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <li class="dropdown">
+                    <span class="user-initials"><?= htmlspecialchars($_SESSION['initiales'] ?? '?'); ?></span>
+                    <ul class="dropdown-menu">
+                        <li><a href="profile.php">Mon Profil</a></li>
+                        <li><a href="cart.php">Voir mon panier (<span id="cart-count"><?= $cart_count ?></span>)</a></li>
+                        <li><a href="dashboard.php">Changer mot de passe</a></li>
+                        <li><a href="logout.php">Déconnexion</a></li>
+                    </ul>
                 </li>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <li><a href="login.php">Connexion</a></li>
+                <li><a href="register.php">Inscription</a></li>
+            <?php endif; ?>
         </ul>
-        <h2>Total: <?= number_format($total, 2); ?> €</h2>
-        <a href="cart.php?clear=true" class="btn">Vider le panier</a>
-        <form method="POST" action="checkout.php" style="display:inline;">
-            <button type="submit" class="btn">Acheter</button>
-        </form>
-        <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
-    <?php endif; ?>
-</section>
+        <button class="menu-toggle" aria-label="Ouvrir le menu">☰</button>
+    </nav>
+</header>
 
+<main>
+    <section class="cart">
+        <h1>Votre Panier</h1>
+
+        <?php if (empty($movies)): ?>
+            <p>Votre panier est vide.</p>
+            <br><br><br><br><br>
+            <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+        <?php else: ?>
+            <ul class="cart-items">
+                <?php foreach ($movies as $movie): ?>
+                    <li>
+                        <img src="../assets/images/<?= htmlspecialchars($movie['image']); ?>" alt="<?= htmlspecialchars($movie['title']); ?>">
+                        <div>
+                            <h3><?= htmlspecialchars($movie['title']); ?></h3>
+                            <p>Prix: <?= number_format($movie['price'], 2); ?> €</p>
+                            <p>Quantité: <?= intval($movie['quantity']); ?></p>
+                            <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">Retirer le film</a>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <h2>Total: <?= number_format($total, 2); ?> €</h2>
+            <a href="cart.php?clear=true" class="btn">Vider le panier</a>
+            <form method="POST" action="checkout.php" style="display:inline;">
+                <button type="submit" class="btn">Acheter</button>
+            </form>
+            <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+        <?php endif; ?>
+    </section>
+</main>
+
+<script>
+    const toggleBtn = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    toggleBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('menu-active');
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('menu-active');
+        });
+    });
+</script>
+
+<?php include '../includes/footer.php'; ?>
 </body>
 </html>

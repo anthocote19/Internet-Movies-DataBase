@@ -16,7 +16,9 @@ if (!in_array($categorie, $categories_autorisees)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catégories - Anthony & Tiago's Movies</title>
-    <link rel="stylesheet" href="categories.css?v=1">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="categories.css?v=1<?= time(); ?>">
+    
 </head>
 <body>
 
@@ -76,6 +78,7 @@ if (!in_array($categorie, $categories_autorisees)) {
     <br><br><br><br>
     <div class="back-btn-wrapper">
     <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+    <br><br><br><br>
 </div>
 
 </div>

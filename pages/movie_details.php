@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $movie_id = intval($_GET['id']);
 
-// Récupérer les infos du film
+
 $query = "SELECT * FROM movies WHERE id = :id";
 $stmt = $pdo->prepare($query);
 $stmt->execute(['id' => $movie_id]);
@@ -25,7 +25,7 @@ $director = htmlspecialchars($movie['director'] ?? 'Non renseigné');
 $price = htmlspecialchars($movie['price'] ?? '0.00');
 $image = htmlspecialchars($movie['image'] ?? 'default.jpg');
 
-// Récupérer les acteurs
+
 $query_actors = "SELECT actors.id, actors.name 
                  FROM actors 
                  INNER JOIN movie_actor ON actors.id = movie_actor.actor_id 
@@ -68,7 +68,18 @@ $actors = $stmt_actors->fetchAll(PDO::FETCH_ASSOC);
                     <span class="user-initials"><?= htmlspecialchars($_SESSION['initiales'] ?? '?'); ?></span>
                     <ul class="dropdown-menu">
                         <li><a href="profile.php">Mon Profil</a></li>
-                        <li><a href="cart.php">Voir mon panier (<span id="cart-count"><?= count($_SESSION['cart'] ?? []) ?></span>)</a></li>
+                        <li><a href="cart.php">Voir mon panier (<?php
+$cart_count = 0;
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ? AND is_active = 1");
+    $stmt->execute([$_SESSION['user_id']]);
+    $cart_count = (int)$stmt->fetchColumn();
+} else {
+    $cart_count = array_sum($_SESSION['cart'] ?? []);
+}
+?>
+<span id="cart-count"><?= $cart_count ?></span>)
+</a></li>
                         <li><a href="dashboard.php">Changer mot de passe</a></li>
                         <li><a href="logout.php">Déconnexion</a></li>
                     </ul>

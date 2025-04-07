@@ -114,7 +114,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     });
 
     $(document).ready(function() {
-        // Ajout au panier
         $(".add-to-cart").click(function() {
             var movieId = $(this).data("id");
 
@@ -135,7 +134,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             });
         });
 
-        // Dropdown utilisateur
+   
         $(".user-initials").on("click", function(e) {
             e.stopPropagation();
             $(this).siblings(".dropdown-menu").slideToggle();
@@ -145,7 +144,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             $(".dropdown-menu").slideUp();
         });
 
-        // Mise à jour du compteur panier au chargement
+        
         $.get('pages/get_cart_count.php', function(response) {
             if (response.total !== undefined) {
                 $("#cart-count").text(response.total);
