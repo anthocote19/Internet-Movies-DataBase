@@ -69,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
 
         <a href="register.php">Pas encore inscrit ? Inscris-toi</a>
+        <a href="../index.php">Ne pas s'inscrire ou se connecter ?</a>
     </div>
 </div>
 

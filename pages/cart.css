@@ -274,7 +274,7 @@ h1 {
     }
 }
 
-/* 📱 Responsive général pour boutons */
+
 .cart .btn, 
 .cart .btn-danger, 
 .cart .back-btn {
@@ -310,3 +310,5 @@ h1 {
         font-size: 18px;
     }
 }
+
+

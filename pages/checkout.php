@@ -14,28 +14,29 @@ try {
     $pdo->beginTransaction();
 
     $cart = [];
-
-    
-    if (!empty($_SESSION['cart'])) {
-        $cart = $_SESSION['cart'];
+    if (isset($_POST['movie_id']) && is_numeric($_POST['movie_id'])) {
+        $movie_id = intval($_POST['movie_id']);
+        $quantity = intval($_POST['quantity'] ?? 1);
+        $cart[$movie_id] = $quantity;
     } else {
-        
-        $stmt = $pdo->prepare("SELECT movie_id, quantity FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL");
-        $stmt->execute([$user_id]);
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($results as $row) {
-            $cart[$row['movie_id']] = $row['quantity'];
+      
+        if (!empty($_SESSION['cart'])) {
+            $cart = $_SESSION['cart'];
+        } else {
+            $stmt = $pdo->prepare("SELECT movie_id, quantity FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL");
+            $stmt->execute([$user_id]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($results as $row) {
+                $cart[$row['movie_id']] = $row['quantity'];
+            }
         }
     }
 
-  
     $stmtUpdateCart = $pdo->prepare("
         UPDATE cart 
         SET purchased_at = NOW(), is_active = 0 
         WHERE user_id = ? AND movie_id = ?
     ");
-
-
     $stmtInsertPurchase = $pdo->prepare("
         INSERT INTO purchases (user_id, movie_id, quantity, purchase_date)
         VALUES (?, ?, ?, NOW())
@@ -46,7 +47,6 @@ try {
         $stmtInsertPurchase->execute([$user_id, $movie_id, $quantity]);
     }
 
- 
     $_SESSION['cart'] = [];
 
     $pdo->commit();
