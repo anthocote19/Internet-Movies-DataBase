@@ -117,7 +117,7 @@ if ($user_id) {
                 <li class="dropdown">
                     <span class="user-initials"><?= htmlspecialchars($_SESSION['initiales'] ?? '?'); ?></span>
                     <ul class="dropdown-menu">
-                        <li><a href="profile.php">Mon Profil</a></li>
+                        <li><a href="profil_de_l'util.php">Mon Profil</a></li>
                         <li><a href="cart.php">Voir mon panier (<span id="cart-count"><?= $cart_count ?></span>)</a></li>
                         <li><a href="dashboard.php">Changer mot de passe</a></li>
                         <li><a href="logout.php">Déconnexion</a></li>
@@ -150,7 +150,7 @@ if ($user_id) {
                             <p>Quantité: <?= intval($movie['quantity']); ?></p>
                             <a href="cart.php?remove=<?= $movie['id']; ?>" class="btn">Retirer le film</a>
 
-                            <form method="POST" action="checkout.php" style="display:inline;">
+                            <form method="POST" action="finalisation_achat.php" style="display:inline;">
                                 <input type="hidden" name="movie_id" value="<?= $movie['id']; ?>">
                                 <input type="hidden" name="quantity" value="<?= intval($movie['quantity']); ?>">
                                 <button type="submit" class="btn">Acheter ce film</button>
@@ -161,7 +161,7 @@ if ($user_id) {
             </ul>
             <h2>Total: <?= number_format($total, 2); ?> €</h2>
             <a href="cart.php?clear=true" class="btn btn-danger">Vider le panier</a>
-            <form method="POST" action="checkout.php" style="display:inline;">
+            <form method="POST" action="finalisation_achat.php" style="display:inline;">
                 <button type="submit" class="btn">Acheter</button>
             </form>
             <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
@@ -169,21 +169,7 @@ if ($user_id) {
     </section>
 </main>
 
-<script>
-    const toggleBtn = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-
-    toggleBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('menu-active');
-    });
-
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('menu-active');
-        });
-    });
-</script>
-
-<?php include '../includes/footer.php'; ?>
+<script src="../assets/js/panier.js?v=<?= time(); ?>"></script>
+<?php include '../includes/footer_bas_de_page.php'; ?>
 </body>
 </html>

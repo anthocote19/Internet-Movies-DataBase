@@ -17,8 +17,8 @@ if (!in_array($categorie, $categories_autorisees)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catégories - Anthony & Tiago's Movies</title>
     <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
-    <link rel="stylesheet" href="categories.css?v=1<?= time(); ?>">
-    
+    <link rel="stylesheet" href="categories.css?v=<?= time(); ?>">
+    <script defer src="../assets/js/categ.js?v=<?= time(); ?>"></script>
 </head>
 <body>
 
@@ -57,7 +57,7 @@ if (!in_array($categorie, $categories_autorisees)) {
                                 <img src='../assets/images/$image' alt='$titre'>
                                 <h3>$titre</h3>
                                 <p>$prix €</p>
-                                <a href='movie_details.php?id=$id' class='btn'>Voir Détails</a>";
+                                <a href='detailsdes_films.php?id=$id' class='btn'>Voir Détails</a>";
                         
                         if (isset($_SESSION['user_id'])) {
                             echo "<button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
@@ -77,45 +77,11 @@ if (!in_array($categorie, $categories_autorisees)) {
 
     <br><br><br><br>
     <div class="back-btn-wrapper">
-    <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
-    <br><br><br><br>
-</div>
-
-</div>
+        <a href="../index.php" class="back-btn">Retourner à l'accueil</a>
+        <br><br><br><br>
+    </div>
 
 </section>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const buttons = document.querySelectorAll('.add-to-cart');
-
-    buttons.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const movieId = this.getAttribute('data-id');
-
-            fetch('ajax.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `movie_id=${movieId}`
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message + " (Total dans le panier : " + data.total + ")");
-                } else {
-                    alert("Erreur : " + data.message);
-                }
-            })
-            .catch(error => {
-                alert("Erreur lors de l'ajout : " + error);
-            });
-        });
-    });
-});
-</script>
 
 </body>
 </html>
