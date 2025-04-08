@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message + " (Total dans le panier : " + data.total + ")");
+                    if (confirm(`${data.message} (Total dans le panier : ${data.total})\n\nSouhaitez-vous voir votre panier ? Cliquez sur OK pour voir votre panier !`)) {
+                        window.location.href = 'cart.php';
+                    }
                 } else {
                     alert("Erreur : " + data.message);
                 }

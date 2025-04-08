@@ -58,6 +58,7 @@ if (!in_array($categorie, $categories_autorisees)) {
                                 <h3>$titre</h3>
                                 <p>$prix €</p>
                                 <a href='detailsdes_films.php?id=$id' class='btn'>Voir Détails</a>";
+                                
                         
                         if (isset($_SESSION['user_id'])) {
                             echo "<button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
