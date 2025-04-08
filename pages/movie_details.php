@@ -97,7 +97,10 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
         <h1><?= $title; ?></h1>
         <img src="../assets/images/<?= $image; ?>" alt="<?= $title; ?>">
-        <p><strong>Réalisateur :</strong> <a href="director_movies.php?director=<?= urlencode($director); ?>"><?= $director; ?></a></p>
+        <p><strong>Réalisateur :</strong> 
+        <?php foreach ($actors as $index => $actor): ?>
+            <?= htmlspecialchars($actor['name']); ?><?= $index < count($actors) - 1 ? ', ' : ''; ?>
+        <?php endforeach; ?>
         
         <p><strong>Acteurs :</strong>
             <?php if (!empty($actors)): ?>

@@ -39,7 +39,7 @@ $purchased_movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <section class="profile-container">
-    <h1>Profil de <?= htmlspecialchars($user['username']) ?></h1>
+    <h1>Votre profil : <?= htmlspecialchars($user['username']) ?></h1>
     <div class="profile-info">
         <p><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($user['username']) ?></p>
         <p><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></p>

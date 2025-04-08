@@ -40,7 +40,23 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* 🛒 Style du panier */
+.user-initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;            
+    height: 40px;           
+    background-color: #00c3ff;
+    color: #000;
+    font-weight: bold;
+    border-radius: 50%;     
+    font-size: 18px;
+    box-shadow: 0 0 10px #00c3ff;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+
 .cart-items {
     list-style: none;
     padding: 0;
@@ -118,7 +134,7 @@ h1 {
     box-shadow: 0 0 15px #00c3ff;
 }
 
-/* 🗑 Vider le panier */
+
 .btn-danger {
     background: linear-gradient(90deg, #ff0000, #cc0000);
 }
@@ -151,7 +167,7 @@ h1 {
     }
 }
 
-/* 🌐 Responsive design amélioré */
+
 @media (max-width: 1024px) {
     .cart {
         padding: 25px;
@@ -243,7 +259,7 @@ h1 {
     }
 }
 
-/* 📱 Responsive Extra Mobile */
+
 @media (max-width: 360px) {
     .cart {
         margin: 30px 8px;
@@ -310,5 +326,7 @@ h1 {
         font-size: 18px;
     }
 }
+
+
 
 

@@ -53,7 +53,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <section class="hero">
     <h1>Bienvenue sur Anthony's and Tiago's Movies</h1>
-    <p>Découvrez, recherchez et achetez vos films préférés en quelques clics.</p>
+    <p>Les meilleurs films lyonnais, à un prix pas cher !</p>
 </section>
 
 <section class="search">
