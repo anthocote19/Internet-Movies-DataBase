@@ -27,7 +27,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <li class="dropdown">
                     <span class="user-initials"><?= $_SESSION['initiales']; ?></span>
                     <ul class="dropdown-menu">
-                        <li><a href="pages/profile.php">Mon Profil</a></li>
+                        <li><a href="pages/profil_de_l'util.php">Mon Profil</a></li>
                         <li>
                             <a href="pages/cart.php">
                                 Voir mon panier (<span id="cart-count">
@@ -58,7 +58,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <section class="search">
     <h2>Rechercher un film</h2>
-    <form action="pages/search.php" method="GET">
+    <form action="pages/recherche.php" method="GET">
         <input type="text" name="q" placeholder="Rechercher par titre ou réalisateur..." required>
         <button type="submit">Rechercher</button>
     </form>
@@ -83,7 +83,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <img src='assets/images/$image' alt='$title'>
                     <h3>$title</h3>
                     <p>$price €</p>
-                    <a href='pages/movie_details.php?id=$id' class='btn'>Voir Détails</a>
+                    <a href='pages/detailsdes_films.php?id=$id' class='btn'>Voir Détails</a>
                     <button class='btn add-to-cart' data-id='$id'>Ajouter au panier</button>";
             
             if (!empty($trailer_url)) {
@@ -107,70 +107,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </section>
 
 <div id="cart-message" class="hidden"></div>
+<br>
+<br>
+<?php include 'includes/footer_bas_de_page.php'; ?>
 
-<script>
-    document.querySelector('.menu-toggle').addEventListener('click', () => {
-        document.querySelector('.nav-links').classList.toggle('menu-active');
-    });
 
-    $(document).ready(function() {
-        $(".add-to-cart").click(function() {
-            var movieId = $(this).data("id");
-
-            $.ajax({
-                url: "pages/ajax.php",
-                type: "POST",
-                data: { movie_id: movieId },
-                dataType: "json",
-                success: function(response) {
-                    $("#cart-message").text(response.message).fadeIn().delay(1500).fadeOut();
-                    if (response.success && response.total !== undefined) {
-                        $("#cart-count").text(response.total);
-                    }
-                },
-                error: function() {
-                    $("#cart-message").text("Erreur lors de l'ajout au panier.").fadeIn().delay(1500).fadeOut();
-                }
-            });
-        });
-
-   
-        $(".user-initials").on("click", function(e) {
-            e.stopPropagation();
-            $(this).siblings(".dropdown-menu").slideToggle();
-        });
-
-        $(document).on("click", function() {
-            $(".dropdown-menu").slideUp();
-        });
-
-        
-        $.get('pages/get_cart_count.php', function(response) {
-            if (response.total !== undefined) {
-                $("#cart-count").text(response.total);
-            }
-        }, 'json');
-    });
-</script>
-
-<style>
-    #cart-message {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        display: none;
-        z-index: 1000;
-    }
-    .hidden { display: none; }
-</style>
-
-<br><br>
-<?php include 'includes/footer.php'; ?>
+<script src="assets/js/index.js?v=<?= time(); ?>"></script>
 <script src="./cart.js?v=<?= time(); ?>"></script>
 
 </body>
