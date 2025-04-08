@@ -10,6 +10,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anthony's and Tiago's Movies</title>
     <link rel="stylesheet" href="assets/css/styles.css?v=<?= time(); ?>">
+    <link rel="stylesheet" href="./pages/ajax_styles.css?v=<?= time(); ?>">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -106,14 +107,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </section>
 
-<div id="cart-message" class="hidden"></div>
 <br>
 <br>
+<div id="cart-message" class="cart-message"></div>
+
 <?php include 'includes/footer_bas_de_page.php'; ?>
 
-
 <script src="assets/js/index.js?v=<?= time(); ?>"></script>
-<script src="./cart.js?v=<?= time(); ?>"></script>
 
 </body>
 </html>

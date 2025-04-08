@@ -1,0 +1,59 @@
+#cart-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    z-index: 9999;
+    display: none;
+    max-width: 90%;
+    text-align: center;
+    font-size: 1rem;
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.4), 0 0 25px rgba(0, 255, 255, 0.2);
+    animation: fadeInSlide 0.4s ease-out forwards;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: white;
+}
+
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+
+#cart-message.success {
+    background: rgba(0, 255, 170, 0.2);
+    border: 1px solid #00ffae;
+    box-shadow: 0 0 15px #00ffcc;
+    color: #00ffcc;
+}
+
+#cart-message.error {
+    background: rgba(255, 0, 60, 0.1);
+    border: 1px solid #ff4c6d;
+    box-shadow: 0 0 15px #ff4c6d;
+    color: #ff4c6d;
+}
+
+
+#cart-message .login-link {
+    color: #00ffff;
+    margin-left: 12px;
+    text-decoration: underline;
+    transition: color 0.3s;
+}
+
+#cart-message .login-link:hover {
+    color: #00c3ff;
+}

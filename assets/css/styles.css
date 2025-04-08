@@ -130,33 +130,98 @@ h1, h2, h3 {
 
 .search {
     text-align: center;
-    padding: 50px;
-}
-
-.search input,
-.search button {
-    padding: 12px;
-    border-radius: 30px;
-    border: none;
-    font-size: 1rem;
-}
-
-.search input {
-    width: 300px;
+    padding: 60px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px #00c3ff, 0 0 40px rgba(0, 255, 255, 0.2);
+    animation: slideIn 1s ease-in-out;
+  }
+  
+  .search input, 
+  .search button {
+    padding: 14px;
+    border-radius: 50px;
+    border: 2px solid rgba(0, 255, 255, 0.5);
+    font-size: 1.1rem;
+    font-family: 'Orbitron', sans-serif;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+  
+  .search input {
+    width: 350px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #00fff7;
     text-align: center;
-}
-
-.search button {
-    padding: 12px 25px;
-    background: cyan;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+  }
+  
+  .search button {
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #00aaff, #00aaff);
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.search button:hover {
-    background: #00ffea;
-    box-shadow: 0 0 15px cyan;
-}
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), 0 0 25px #00aaff;
+    transition: transform 0.3s, background 0.3s;
+    font-weight: bold;
+  }
+  
+  .search button:hover {
+    background: linear-gradient(135deg, #00aaff, #00aaff);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #00aaff, 0 0 50px #00aaff;
+  }
+  
+  .search input:focus {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 15px #00aaff;
+  }
+  
+  .search button:focus {
+    outline: none;
+    box-shadow: 0 0 25px #00aaff;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .search input {
+      width: 280px;
+      font-size: 0.95rem;
+    }
+  
+    .search button {
+      padding: 12px 24px;
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .search {
+      padding: 40px;
+    }
+  
+    .search input {
+      width: 240px;
+      font-size: 1rem;
+    }
+  
+    .search button {
+      padding: 10px 20px;
+      font-size: 1rem;
+    }
+  }
+  
 
 
 .movies-container {
@@ -475,3 +540,4 @@ main {
     font-size: 14px;
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
 }
+
