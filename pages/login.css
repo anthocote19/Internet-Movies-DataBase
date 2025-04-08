@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +16,7 @@
     padding: 2rem;
   }
   
-  /* Wrapper général */
+  
   .login-wrapper {
     width: 100%;
     max-width: 420px;
@@ -28,7 +28,7 @@
     animation: fadeIn 0.8s ease-in-out;
   }
   
-  /* Titre */
+
   .login-container h2 {
     text-align: center;
     color: #00fff7;
@@ -37,7 +37,7 @@
     font-size: 1.8rem;
   }
   
-  /* Formulaire */
+  
   form {
     display: flex;
     flex-direction: column;
@@ -60,7 +60,7 @@
     outline: none;
   }
   
-  /* Bouton */
+
   button {
     background-color: #00fff7;
     color: #000;
@@ -78,7 +78,7 @@
     box-shadow: 0 0 15px #00fff7;
   }
   
-  /* Erreur */
+  
   .error {
     margin-top: 1rem;
     color: #ff6b6b;
@@ -87,7 +87,7 @@
     animation: shake 0.4s ease;
   }
   
-  /* Lien vers l'inscription */
+  
   a {
     display: block;
     text-align: center;
@@ -102,7 +102,7 @@
     color: #ffffff;
   }
   
-  /* Responsive */
+  
   @media (max-width: 500px) {
     .login-wrapper {
       padding: 1.5rem;
@@ -117,7 +117,7 @@
     }
   }
   
-  /* Animations */
+
   @keyframes fadeIn {
     from {
       opacity: 0;

@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     if (!empty($email) && !empty($password)) {
-        // Validation de l'email
+      
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $error = "Format d'email invalide.";
         } else {
@@ -20,12 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = htmlspecialchars($user['username']);
 
-                // Initiales de l'utilisateur
+                
                 $name_parts = explode(" ", trim($user['username']));
                 $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
                 $_SESSION['initiales'] = $initiales;
 
-                // Charger le panier depuis la base de données
+                
                 $_SESSION['cart'] = [];
                 $stmt = $pdo->prepare("SELECT movie_id, quantity FROM cart WHERE user_id = ?");
                 $stmt->execute([$user['id']]);

@@ -6,14 +6,15 @@ body {
     padding: 0;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+    animation: gradientBG 20s ease infinite;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     text-align: center;
-    color: #fff;
+    color: #ffffff;
+    overflow-x: hidden;
 }
 
 @keyframes gradientBG {
@@ -23,80 +24,118 @@ body {
 }
 
 header {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     color: #00fff7;
-    padding: 20px 0;
+    padding: 25px 0;
     width: 100%;
-    font-size: 24px;
-    letter-spacing: 2px;
-    box-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+    font-size: 26px;
+    letter-spacing: 3px;
+    box-shadow: 0 0 15px #00fff7, 0 0 30px #00fff7;
+    text-transform: uppercase;
+    border-bottom: 2px solid #00fff7;
+    backdrop-filter: blur(8px);
+    animation: headerPulse 3s infinite ease-in-out;
 }
 
-.checkout, .container {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 40px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+@keyframes headerPulse {
+    0%, 100% { text-shadow: 0 0 10px #00fff7; }
+    50% { text-shadow: 0 0 20px #00fff7; }
+}
+
+.container, .checkout {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 50px;
+    border-radius: 24px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
     text-align: center;
-    max-width: 600px;
-    width: 90%;
-    margin: 20px auto;
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    max-width: 700px;
+    width: 92%;
+    margin: 30px auto;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover, .checkout:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
 }
 
 h1 {
     color: #00fff7;
-    font-size: 32px;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #00fff7;
+    font-size: 36px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px #00fff7, 0 0 25px #00ffea;
 }
 
 p {
-    font-size: 18px;
-    color: #e0e0e0;
-    margin-bottom: 25px;
+    font-size: 20px;
+    color: #cfd8dc;
+    margin-bottom: 30px;
+    line-height: 1.6;
 }
 
 .buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
 }
 
 .btn {
-    background: linear-gradient(135deg, #00fff7, #007cf0);
+    background: linear-gradient(145deg, #00fff7, #007cf0);
     color: #000;
-    padding: 14px 28px;
+    padding: 16px 32px;
     border: none;
-    border-radius: 12px;
-    font-size: 18px;
+    border-radius: 14px;
+    font-size: 20px;
+    font-weight: bold;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 0 10px #00fff7, 0 0 20px #007cf0;
+    box-shadow: 0 0 15px #00fff7, 0 0 25px #007cf0;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+    transform: rotate(45deg);
+    animation: shine 4s infinite linear;
+    z-index: -1;
+}
+
+@keyframes shine {
+    0% { transform: translate(-100%, -100%) rotate(45deg); }
+    100% { transform: translate(100%, 100%) rotate(45deg); }
 }
 
 .btn:hover {
-    background: linear-gradient(135deg, #00ffcb, #0090ff);
-    box-shadow: 0 0 20px #00ffcb, 0 0 30px #00ffcb;
-    transform: scale(1.08);
+    background: linear-gradient(135deg, #0090ff, #0090ff);
+    box-shadow: 0 0 25px #0090ff, 0 0 35px #0090ff;
+    transform: scale(1.1);
 }
 
-/* 📱 Responsive Futuriste */
 @media (max-width: 768px) {
     h1 {
-        font-size: 24px;
+        font-size: 28px;
     }
 
     p {
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .btn {
-        font-size: 16px;
-        padding: 12px 20px;
+        font-size: 17px;
+        padding: 14px 24px;
         width: 100%;
         max-width: 280px;
     }
@@ -107,14 +146,14 @@ p {
     }
 
     .checkout, .container {
-        padding: 25px;
-        margin: 15px;
+        padding: 35px;
+        margin: 20px;
     }
 }
 
 @media (max-width: 480px) {
     h1 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     p {
@@ -122,12 +161,12 @@ p {
     }
 
     .btn {
-        font-size: 14px;
-        padding: 10px 18px;
+        font-size: 15px;
+        padding: 12px 20px;
         border-radius: 10px;
     }
 
     .checkout, .container {
-        padding: 20px;
+        padding: 25px;
     }
 }
