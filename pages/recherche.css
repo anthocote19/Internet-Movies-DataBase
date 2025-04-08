@@ -5,76 +5,120 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: #ffffff;
   min-height: 100vh;
   padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-x: hidden;
 }
 
 .resultats-recherche {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(12px);
-  padding: 2rem;
-  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px);
+  padding: 2.5rem;
+  border-radius: 24px;
   width: 100%;
-  max-width: 800px;
-  box-shadow: 0 0 20px #00fff7, 0 0 40px #00aaff;
+  max-width: 900px;
+  box-shadow:
+    0 0 15px #00fff7,
+    0 0 30px #00bcd4,
+    0 0 60px #007bff inset;
   animation: apparition 1s ease-in-out;
+  border: 1px solid rgba(0, 255, 255, 0.2);
 }
 
 .resultats-recherche h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
   text-align: center;
   color: #00fff7;
-  text-shadow: 0 0 10px #00fff7;
+  text-shadow: 0 0 15px #00fff7, 0 0 5px #0ff;
+  letter-spacing: 2px;
 }
 
 .resultats-recherche ul {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .resultats-recherche li {
   background: rgba(255, 255, 255, 0.05);
-  padding: 1rem;
-  border-radius: 12px;
-  transition: transform 0.3s, background 0.3s;
+  padding: 1.2rem;
+  border-radius: 16px;
   border-left: 4px solid #00fff7;
+  transition: transform 0.4s ease, background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resultats-recherche li::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0,255,247,0.1), transparent 60%);
+  transform: rotate(45deg);
+  animation: pulse 4s infinite linear;
 }
 
 .resultats-recherche li:hover {
-  transform: scale(1.02);
-  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .resultats-recherche a {
   color: #ffffff;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1.15rem;
   display: block;
+  transition: color 0.3s, text-shadow 0.3s;
 }
 
 .resultats-recherche a:hover {
   color: #00fff7;
-  text-shadow: 0 0 8px #00fff7;
+  text-shadow: 0 0 12px #00fff7;
 }
 
-/* Responsive */
+
+.bouton-retour {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #00fff7, #00bcd4);
+  color: #0f0f0f;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00fff7, 0 0 20px #00bcd4;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.bouton-retour:hover {
+  background: #0ff;
+  color: #000;
+  box-shadow: 0 0 20px #00fff7, 0 0 30px #00bcd4;
+}
+
+
 @media (max-width: 768px) {
   .resultats-recherche {
-    padding: 1.5rem;
+    padding: 2rem;
   }
 
   .resultats-recherche h2 {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
   }
 
   .resultats-recherche a {
@@ -84,22 +128,28 @@ body {
 
 @media (max-width: 480px) {
   .resultats-recherche {
-    padding: 1rem;
+    padding: 1.2rem;
   }
 
   .resultats-recherche li {
-    padding: 0.8rem;
+    padding: 1rem;
   }
 
   .resultats-recherche h2 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+  }
+
+  .bouton-retour {
+    padding: 8px 16px;
+    font-size: 0.9rem;
   }
 }
+
 
 @keyframes apparition {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -107,17 +157,14 @@ body {
   }
 }
 
-.bouton-retour {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #007BFF;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.bouton-retour:hover {
-  background-color: #0056b3;
+@keyframes pulse {
+  0% {
+    transform: scale(1) rotate(45deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(45deg);
+  }
+  100% {
+    transform: scale(1) rotate(45deg);
+  }
 }
