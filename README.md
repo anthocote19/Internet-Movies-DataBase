@@ -6,7 +6,7 @@ The project can be done by teams of 2 peoples maximum
     
 As always you will have to defend your project with a short presentation.    
     
-    
+     
   
 2 - Features      
 Your project is to build a website your users to buy a video but also to search for a movie
