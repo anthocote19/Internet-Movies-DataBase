@@ -72,9 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             <?php else: ?>
                 <a href="../index.php" class="btn">Retour à l'accueil</a>
-            <?php endif; ?>
+                
 
-            <a href="logout.php">Déconnexion</a>
+            <?php endif; ?>
+            <a href="../index.php">Ne pas changer mon mot de passe et revenir à l'accueil ?</a>
+            <a href="logout.php">Se déconnecter ?</a>
         </div>
     </div>
 </body>
