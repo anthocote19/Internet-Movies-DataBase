@@ -9,7 +9,13 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $idFilm = (int) $_GET['id'];
 
-$stmt = $pdo->prepare("SELECT * FROM movies WHERE id = :id");
+// On récupère le film avec le nom du réalisateur (JOIN)
+$stmt = $pdo->prepare("
+    SELECT m.*, d.name AS director_name 
+    FROM movies m
+    LEFT JOIN directors d ON m.director_id = d.id
+    WHERE m.id = :id
+");
 $stmt->execute(['id' => $idFilm]);
 $film = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -19,10 +25,11 @@ if (!$film) {
 }
 
 $titre = htmlspecialchars($film['title'] ?? 'Titre inconnu');
-$realisateur = htmlspecialchars($film['director'] ?? 'Non renseigné');
+$realisateur = $film['director_name'] ?? null;
 $prix = htmlspecialchars($film['price'] ?? '0.00');
 $image = htmlspecialchars($film['image'] ?? 'default.jpg');
 
+// On récupère les acteurs liés au film
 $stmtActeurs = $pdo->prepare("
     SELECT actors.id, actors.name 
     FROM actors 
@@ -87,7 +94,15 @@ $listeActeurs = $stmtActeurs->fetchAll(PDO::FETCH_ASSOC);
         <h1><?= $titre; ?></h1>
         <img src="../assets/images/<?= $image; ?>" alt="<?= $titre; ?>">
 
-        <p><strong>Réalisateur :</strong> <?= $realisateur; ?></p>
+        <p><strong>Réalisateur :</strong>
+            <?php if ($realisateur): ?>
+                <a href="films_realisateurs.php?name=<?= urlencode($realisateur); ?>">
+                    <?= htmlspecialchars($realisateur); ?>
+                </a>
+            <?php else: ?>
+                <em>Non renseigné</em>
+            <?php endif; ?>
+        </p>
 
         <p><strong>Acteurs :</strong>
             <?php if (!empty($listeActeurs)): ?>
