@@ -1,11 +1,14 @@
 <?php
 require '../config/database.php';
 
-$recherche = htmlspecialchars($_GET['q'] ?? '');
 
-$stmt = $pdo->prepare("SELECT * FROM movies WHERE title LIKE ? OR director LIKE ?");
-$stmt->execute(["%$recherche%", "%$recherche%"]);
-$films = $stmt->fetchAll();
+$recherche = isset($_GET['q']) ? trim(htmlspecialchars($_GET['q'])) : '';
+
+
+$sql = "SELECT * FROM movies WHERE title LIKE ? OR director LIKE ?";
+$requete = $pdo->prepare($sql);
+$requete->execute(["%$recherche%", "%$recherche%"]);
+$filmsTrouves = $requete->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -20,15 +23,19 @@ $films = $stmt->fetchAll();
 <body>
 
 <div class="resultats-recherche">
-    <h2>Résultats de recherche</h2>
+    <h2>Résultats pour : "<?= htmlspecialchars($recherche) ?>"</h2>
     <ul>
-        <?php if (count($films) > 0): ?>
-            <?php foreach ($films as $film): ?>
-                <li><a href="detailsdes_films.php?id=<?= $film['id'] ?>"><?= $film['title'] ?> - <?= $film['director'] ?></a></li>
+        <?php if (!empty($filmsTrouves)): ?>
+            <?php foreach ($filmsTrouves as $film): ?>
+                <li>
+                    <a href="detailsdes_films.php?id=<?= $film['id'] ?>">
+                        <?= $film['title'] ?> - Réalisé par <?= $film['director'] ?>
+                    </a>
+                </li>
             <?php endforeach; ?>
         <?php else: ?>
             <li>Aucun film trouvé pour votre recherche.</li>
-            <li><a href="../index.php" class="bouton-retour">Cherchez un autre film ?</a></li>
+            <li><a href="../index.php" class="bouton-retour">Revenir à l'accueil</a></li>
         <?php endif; ?>
     </ul>
 </div>

@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (toggle && navLinks) {
         toggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+            navLinks.classList.toggle('menu-active');
+
         });
     }
 });
