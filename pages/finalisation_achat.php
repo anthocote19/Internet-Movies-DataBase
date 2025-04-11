@@ -2,9 +2,10 @@
 session_start();
 require_once '../config/database.php';
 
-$user_id = $_SESSION['user_id'] ?? null;
+$utilisateurId = $_SESSION['user_id'] ?? null;
 
-if (!$user_id || (empty($_SESSION['cart']) && !hasCartInDatabase($user_id, $pdo))) {
+
+if (!$utilisateurId || (empty($_SESSION['cart']) && !panierExistantEnBase($utilisateurId, $pdo))) {
     http_response_code(400);
     echo "<h1>Erreur</h1><p>Vous devez être connecté et avoir un panier rempli pour finaliser l'achat.</p>";
     exit();
@@ -13,56 +14,52 @@ if (!$user_id || (empty($_SESSION['cart']) && !hasCartInDatabase($user_id, $pdo)
 try {
     $pdo->beginTransaction();
 
-    $cart = [];
-    if (isset($_POST['movie_id']) && is_numeric($_POST['movie_id'])) {
-        $movie_id = intval($_POST['movie_id']);
-        $quantity = intval($_POST['quantity'] ?? 1);
-        $cart[$movie_id] = $quantity;
+    $panier = [];
+
+
+    if (!empty($_POST['movie_id']) && is_numeric($_POST['movie_id'])) {
+        $idFilm = (int) $_POST['movie_id'];
+        $quantite = (int) ($_POST['quantity'] ?? 1);
+        $panier[$idFilm] = $quantite;
     } else {
-      
+       
         if (!empty($_SESSION['cart'])) {
-            $cart = $_SESSION['cart'];
+            $panier = $_SESSION['cart'];
         } else {
-            $stmt = $pdo->prepare("SELECT movie_id, quantity FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL");
-            $stmt->execute([$user_id]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach ($results as $row) {
-                $cart[$row['movie_id']] = $row['quantity'];
+            $sql = "SELECT movie_id, quantity FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$utilisateurId]);
+            foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $ligne) {
+                $panier[$ligne['movie_id']] = $ligne['quantity'];
             }
         }
     }
 
-    $stmtUpdateCart = $pdo->prepare("
-        UPDATE cart 
-        SET purchased_at = NOW(), is_active = 0 
-        WHERE user_id = ? AND movie_id = ?
-    ");
-    $stmtInsertPurchase = $pdo->prepare("
-        INSERT INTO purchases (user_id, movie_id, quantity, purchase_date)
-        VALUES (?, ?, ?, NOW())
-    ");
+   
+    $majPanier = $pdo->prepare("UPDATE cart SET purchased_at = NOW(), is_active = 0 WHERE user_id = ? AND movie_id = ?");
+    $ajoutAchat = $pdo->prepare("INSERT INTO purchases (user_id, movie_id, quantity, purchase_date) VALUES (?, ?, ?, NOW())");
 
-    foreach ($cart as $movie_id => $quantity) {
-        $stmtUpdateCart->execute([$user_id, $movie_id]);
-        $stmtInsertPurchase->execute([$user_id, $movie_id, $quantity]);
+    
+    foreach ($panier as $idFilm => $quantite) {
+        $majPanier->execute([$utilisateurId, $idFilm]);
+        $ajoutAchat->execute([$utilisateurId, $idFilm, $quantite]);
     }
 
     $_SESSION['cart'] = [];
-
     $pdo->commit();
-
     ?>
+
     <!DOCTYPE html>
     <html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>Merci pour votre achat !</title>
-        <link rel="stylesheet" href="finalisation_achat.css?v=<?php echo time(); ?>">
+        <link rel="stylesheet" href="finalisation_achat.css?v=<?= time(); ?>">
     </head>
     <body>
         <div class="container">
             <h1>Merci pour votre achat !</h1>
-            <p>Votre commande a été traitée avec succès.</p>
+            <p>Votre commande a bien été prise en compte.</p>
             <div class="buttons">
                 <a href="../index.php" class="btn">Retour à l'accueil</a>
                 <a href="./categories.php" class="btn">Poursuivre mes achats</a>
@@ -70,19 +67,20 @@ try {
         </div>
     </body>
     </html>
-    <?php
 
+    <?php
 } catch (Exception $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
     http_response_code(500);
-    echo "<h1>Erreur</h1><p>Une erreur est survenue lors de l'achat : " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<h1>Erreur</h1><p>Une erreur est survenue : " . htmlspecialchars($e->getMessage()) . "</p>";
 }
 
-function hasCartInDatabase($user_id, $pdo) {
+
+function panierExistantEnBase($utilisateurId, $pdo) {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM cart WHERE user_id = ? AND is_active = 1 AND purchased_at IS NULL");
-    $stmt->execute([$user_id]);
+    $stmt->execute([$utilisateurId]);
     return $stmt->fetchColumn() > 0;
 }
 ?>

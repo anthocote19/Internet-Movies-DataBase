@@ -328,5 +328,46 @@ h1 {
 }
 
 
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.quantity-controls .btn-qty {
+    background: linear-gradient(145deg, #0ff, #0cc);
+    border: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 5px #0ff, 0 0 10px #0ff inset;
+}
+
+.quantity-controls .btn-qty:hover {
+    background: linear-gradient(145deg, #00f2ff, #00e0ff);
+    box-shadow: 0 0 8px #0ff, 0 0 15px #0ff inset;
+    transform: scale(1.1);
+}
+
+.quantity-controls .quantity {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0ff;
+    font-family: 'Orbitron', sans-serif;
+    min-width: 30px;
+    text-align: center;
+    user-select: none;
+}
+
 
 
