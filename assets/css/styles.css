@@ -116,7 +116,7 @@ h1, h2, h3 {
     }
 }
 
-/* Hero Section */
+
 .hero {
     text-align: center;
     padding: 150px 20px 100px;
@@ -137,7 +137,6 @@ h1, h2, h3 {
     font-size: 3rem;
 }
 
-/* Search */
 .search {
     text-align: center;
     padding: 60px;
@@ -225,7 +224,7 @@ h1, h2, h3 {
     }
 }
 
-/* Movie Grid */
+
 .movies-container {
     display: flex;
     flex-wrap: wrap;
@@ -276,7 +275,7 @@ h1, h2, h3 {
     box-shadow: 0 0 15px cyan;
 }
 
-/* Catégories */
+
 .category-list {
     display: flex;
     justify-content: center;
@@ -300,7 +299,7 @@ h1, h2, h3 {
     box-shadow: 0 0 15px cyan;
 }
 
-/* Footer */
+
 .footer {
     flex-shrink: 0;
     width: 100%;
@@ -313,7 +312,7 @@ h1, h2, h3 {
     box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Movie details */
+
 .movie-details {
     padding: 20px;
     max-width: 1000px;
@@ -371,7 +370,7 @@ h1, h2, h3 {
     color: #e76a38;
 }
 
-/* Dropdown */
+
 .dropdown {
     position: relative;
 }
@@ -420,7 +419,6 @@ h1, h2, h3 {
     background-color: #444;
 }
 
-/* Responsive footer + mobile navbar */
 @media (max-width: 480px) {
     .navbar {
         flex-direction: column;
