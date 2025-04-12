@@ -1,11 +1,16 @@
 <?php
 require '../config/database.php';
 
-
 $recherche = isset($_GET['q']) ? trim(htmlspecialchars($_GET['q'])) : '';
 
 
-$sql = "SELECT * FROM movies WHERE title LIKE ? OR director LIKE ?";
+$sql = "
+    SELECT movies.*, directors.name AS director_name
+    FROM movies
+    LEFT JOIN directors ON movies.director_id = directors.id
+    WHERE movies.title LIKE ? OR directors.name LIKE ?
+";
+
 $requete = $pdo->prepare($sql);
 $requete->execute(["%$recherche%", "%$recherche%"]);
 $filmsTrouves = $requete->fetchAll();
@@ -29,7 +34,7 @@ $filmsTrouves = $requete->fetchAll();
             <?php foreach ($filmsTrouves as $film): ?>
                 <li>
                     <a href="detailsdes_films.php?id=<?= $film['id'] ?>">
-                        <?= $film['title'] ?> - Réalisé par <?= $film['director'] ?>
+                        <?= $film['title'] ?> - Réalisé par <?= $film['director_name'] ?? 'Inconnu' ?>
                     </a>
                 </li>
             <?php endforeach; ?>

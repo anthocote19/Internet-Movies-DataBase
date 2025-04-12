@@ -71,40 +71,38 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </header>
 
 <br><br><br><br>
+<main>
+    <h1>Liste des Films<?= isset($name) ? " de " . htmlspecialchars($name) : "" ?></h1>
 
-<h1>Liste des Films<?= isset($name) ? " de " . htmlspecialchars($name) : "" ?></h1>
+    <?php if (isset($name)): ?>
+        <a href="./detailsdes_films.php" class="back-btn">Retour à tous les films</a>
+    <?php endif; ?>
 
-<?php if (isset($name)): ?>
-    <a href="./detailsdes_films.php" class="back-btn">Retour à tous les films</a>
-<?php endif; ?>
+    <?php if (count($films) > 0): ?>
+        <div class="films-container">
+            <?php foreach ($films as $film): ?>
+                <div class="film">
+                    <h2><?= htmlspecialchars($film['title']) ?></h2>
+                    <p>
+                        <strong>Réalisateur :</strong>
+                        <?php if (!empty($film['director_name'])): ?>
+                            <a href="films_realisateurs.php?name=<?= urlencode($film['director_name']) ?>">
+                                <?= htmlspecialchars($film['director_name']) ?>
+                            </a>
+                        <?php else: ?>
+                            <em>Non renseigné</em>
+                        <?php endif; ?>
+                    </p>
+                    <p><strong>Prix :</strong> <?= number_format($film['price'], 2) ?> €</p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p>Aucun film trouvé.</p>
+    <?php endif; ?>
+</main>
 
-<?php if (count($films) > 0): ?>
-    <div class="films-container">
-        <?php foreach ($films as $film): ?>
-            <div class="film">
-                <h2><?= htmlspecialchars($film['title']) ?></h2>
-                <p>
-                    <strong>Réalisateur :</strong>
-                    <?php if (!empty($film['director_name'])): ?>
-                        <a href="films_realisateurs.php?name=<?= urlencode($film['director_name']) ?>">
-                            <?= htmlspecialchars($film['director_name']) ?>
-                        </a>
-                    <?php else: ?>
-                        <em>Non renseigné</em>
-                    <?php endif; ?>
-                </p>
-                <p><strong>Prix :</strong> <?= number_format($film['price'], 2) ?> €</p>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <button class="add-to-cart-btn" data-id="<?= $film['id'] ?>">Ajouter au panier</button>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>Aucun film trouvé.</p>
-<?php endif; ?>
 
 <?php include '../includes/footer_bas_de_page.php'; ?>
-<script src="../assets/js/films_rea.js?v=<?= time(); ?>"></script>
 </body>
 </html>
