@@ -37,33 +37,40 @@ $films = $req->fetchAll();
 </head>
 <body>
 
-<section class="conteneur-profil">
-    <h1>Bienvenue <?= htmlspecialchars($user['username']) ?></h1>
+<body>
+    <main>
+        <section class="conteneur-profil">
+            <h1>Bienvenue <?= htmlspecialchars($user['username']) ?></h1>
 
-    <div class="infos-profil">
-        <p><strong>Pseudo :</strong> <?= htmlspecialchars($user['username']) ?></p>
-        <p><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></p>
-        <p><strong>Inscrit depuis :</strong> <?= date("d/m/Y", strtotime($user['date_joined'])) ?></p>
-    </div>
+            <div class="infos-profil">
+                <p><strong>Pseudo :</strong> <?= htmlspecialchars($user['username']) ?></p>
+                <p><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></p>
+                <p><strong>Inscrit depuis :</strong> <?= date("d/m/Y", strtotime($user['date_joined'])) ?></p>
+            </div>
 
-    <h2>Mes films achetés</h2>
-    <div class="conteneur-films">
-        <?php if (empty($films)): ?>
-            <p>Aucun film acheté pour le moment.</p>
-        <?php else: ?>
-            <?php foreach ($films as $film): ?>
-                <div class="carte-film">
-                    <img src="../assets/images/<?= htmlspecialchars($film['image']) ?>" alt="<?= htmlspecialchars($film['title']) ?>">
-                    <h3><?= htmlspecialchars($film['title']) ?></h3>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+            <h2>Mes films achetés</h2>
+            <div class="conteneur-films">
+                <?php if (empty($films)): ?>
+                    <p>Aucun film acheté pour le moment.</p>
+                <?php else: ?>
+                    <?php foreach ($films as $film): ?>
+                        <div class="carte-film">
+                            <img src="../assets/images/<?= htmlspecialchars($film['image']) ?>" alt="<?= htmlspecialchars($film['title']) ?>">
+                            <h3><?= htmlspecialchars($film['title']) ?></h3>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
 
-    <a href="../index.php" class="bouton retour">Accueil</a>
-</section>
+            <a href="../index.php" class="bouton retour">Accueil</a>
+        </section>
+    </main>
 
-<?php include '../includes/footer_bas_de_page.php'; ?>
+    <?php include '../includes/footer_bas_de_page.php'; ?>
+</body>
+
+
+
 
 </body>
 </html>

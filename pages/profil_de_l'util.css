@@ -6,103 +6,119 @@
 }
 
 body {
-    background: radial-gradient(ellipse at top left, #0f0f0f, #1a1a1a 80%);
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     color: #e0f7ff;
     overflow-x: hidden;
     min-height: 100vh;
-    padding: 20px;
-    animation: backgroundFlow 20s infinite linear;
+    display: flex;
+    flex-direction: column;
+    animation: backgroundShift 40s linear infinite;
 }
 
-@keyframes backgroundFlow {
-    0% { background-position: 0 0; }
-    100% { background-position: 100% 100%; }
+@keyframes backgroundShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+main {
+    flex: 1;
+    padding: 30px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
 }
 
 h1, h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     font-size: 3rem;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
     text-transform: uppercase;
-    color: #00faff;
-    text-shadow: 0 0 15px #00faff, 0 0 30px #0066ff;
-    animation: pulseGlow 3s ease-in-out infinite;
+    color: #00fff0;
+    text-shadow: 0 0 10px #0ff, 0 0 25px #00f, 0 0 50px #ff00e8, 0 0 100px #ff00e8;
+    animation: glowPulse 2.5s ease-in-out infinite, textShadowShift 1s infinite alternate;
 }
 
-@keyframes pulseGlow {
-    0%, 100% { text-shadow: 0 0 15px #00faff, 0 0 30px #0066ff; }
-    50% { text-shadow: 0 0 25px #00ffff, 0 0 50px #0088ff; }
+@keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 25px #0ff, 0 0 40px #00f, 0 0 70px #ff00e8; }
+    50% { text-shadow: 0 0 35px #0ff, 0 0 70px #00f, 0 0 150px #ff00e8; }
+}
+
+@keyframes textShadowShift {
+    0% { text-shadow: 0 0 15px #0ff, 0 0 40px #ff00e8, 0 0 80px #ff00e8; }
+    100% { text-shadow: 0 0 25px #0ff, 0 0 60px #ff00e8, 0 0 100px #ff00e8; }
 }
 
 .conteneur-profil {
-    max-width: 950px;
-    margin: 50px auto;
-    background: linear-gradient(145deg, #1c1c1c, #111);
-    border: 2px solid #00faff;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 0 30px #00faff88, inset 0 0 15px #00faff44;
-    backdrop-filter: blur(15px);
+    width: 100%;
+    max-width: 1100px;
+    margin: 60px auto;
+    background: rgba(15, 15, 30, 0.85);
+    border: 2px solid #00fff2;
+    border-radius: 25px;
+    padding: 50px 40px;
+    box-shadow: 0 0 60px #00fff277, inset 0 0 35px #00e7ff55;
+    backdrop-filter: blur(30px);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .conteneur-profil:hover {
-    transform: scale(1.015);
-    box-shadow: 0 0 40px #00faffcc, inset 0 0 20px #00faff88;
+    transform: scale(1.05);
+    box-shadow: 0 0 80px #00ffffcc, inset 0 0 50px #00e7ff88;
 }
 
 .infos-profil p {
-    font-size: 1.25rem;
-    margin: 20px 0;
+    font-size: 1.4rem;
+    margin: 18px 0;
     text-align: center;
-    color: #d0d0d0;
-    text-shadow: 0 0 5px #00ffff33;
+    color: #cceeff;
+    text-shadow: 0 0 10px #00ffff44, 0 0 20px #00ffff88;
 }
 
 .conteneur-films {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
+    gap: 35px;
+    margin-top: 50px;
 }
 
 .carte-film {
-    background: linear-gradient(160deg, #111, #222);
-    border: 2px solid #00ffff44;
-    border-radius: 15px;
+    background: linear-gradient(160deg, #0c0c0c, #1a1a1a);
+    border: 2px solid #00faff66;
+    border-radius: 20px;
     overflow: hidden;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 20px #00faff33, inset 0 0 5px #00faff11;
-    backdrop-filter: blur(4px);
+    box-shadow: 0 0 25px #00faff55, inset 0 0 10px #00ffff11;
 }
 
 .carte-film:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 0 25px #00faffcc, inset 0 0 10px #00faff88;
+    transform: scale(1.05);
+    box-shadow: 0 0 40px #00faffcc, inset 0 0 20px #00faff88;
 }
 
 .carte-film img {
     width: 100%;
-    height: 320px;
+    height: 330px;
     object-fit: cover;
-    filter: grayscale(10%) contrast(1.1);
+    filter: grayscale(5%) brightness(1.05) contrast(1.2);
     transition: filter 0.3s ease;
 }
 
 .carte-film:hover img {
-    filter: grayscale(0%) contrast(1.3);
+    filter: grayscale(0%) brightness(1.1) contrast(1.4);
 }
 
 .carte-film h3 {
     padding: 20px;
     font-size: 1.3rem;
     color: #00faff;
-    background-color: #1b1b1b;
+    background-color: #101010;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    text-shadow: 0 0 10px #00ffffaa;
+    text-shadow: 0 0 15px #00ffffaa;
     border-top: 1px solid #00ffff44;
 }
 
@@ -110,71 +126,77 @@ h1, h2 {
     display: inline-block;
     background: linear-gradient(145deg, #00ffff, #00ccff);
     color: #000;
-    padding: 14px 30px;
-    margin: 40px auto 0;
+    padding: 14px 32px;
+    margin: 45px auto 0;
     text-align: center;
     text-decoration: none;
-    border-radius: 35px;
+    border-radius: 40px;
     font-size: 1.1rem;
     font-weight: bold;
-    box-shadow: 0 0 15px #00faff99;
-    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 20px #00faffaa;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .bouton:hover, .retour:hover {
     background: linear-gradient(145deg, #00cccc, #0099cc);
-    transform: scale(1.08);
-    box-shadow: 0 0 20px #00faffcc;
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #00faffcc;
 }
 
 .retour {
-    background: linear-gradient(145deg, lightskyblue, #87cefa);
-    color: #000;
+    background: linear-gradient(145deg, #aee8ff, #73cfff);
 }
 
 .retour:hover {
-    background: linear-gradient(145deg, #7ec8e3, #5ab4d1);
+    background: linear-gradient(145deg, #7ddfff, #5cc5f0);
 }
 
+footer {
+    background-color: #0a0a0a;
+    padding: 25px;
+    text-align: center;
+    color: #ccc;
+    border-top: 1px solid #00faff33;
+    box-shadow: 0 -2px 20px #00faff33;
+    font-size: 1rem;
+    margin-top: auto;
+}
+
+/* Glitch effect */
+@keyframes glitch {
+    0% { transform: translate(2px, 2px) rotate(0deg); }
+    20% { transform: translate(-2px, -2px) rotate(2deg); }
+    40% { transform: translate(2px, 2px) rotate(-2deg); }
+    60% { transform: translate(-2px, -2px) rotate(0deg); }
+    80% { transform: translate(2px, 2px) rotate(1deg); }
+    100% { transform: translate(0px, 0px) rotate(0deg); }
+}
+
+.carte-film img:hover {
+    animation: glitch 0.5s infinite alternate;
+}
+
+
 @media (max-width: 1024px) {
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    h2 {
-        font-size: 2.2rem;
-    }
-
-    .carte-film img {
-        height: 260px;
-    }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2.2rem; }
+    .carte-film img { height: 260px; }
 }
 
 @media (max-width: 768px) {
-    .conteneur-profil {
-        padding: 25px;
-    }
-
+    .conteneur-profil { padding: 30px 20px; }
     .conteneur-films {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
-
-    h1, h2 {
-        font-size: 1.9rem;
-    }
-
-    .carte-film h3 {
-        font-size: 1.05rem;
-    }
+    h1, h2 { font-size: 1.8rem; }
+    .carte-film h3 { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
-    .carte-film img {
-        height: 200px;
-    }
-
+    .carte-film img { height: 200px; }
     .bouton, .retour {
         font-size: 0.95rem;
-        padding: 10px 20px;
+        padding: 10px 22px;
     }
+    .infos-profil p { font-size: 1.05rem; }
 }
