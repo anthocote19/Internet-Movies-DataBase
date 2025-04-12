@@ -8,7 +8,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anthony's and Tiago's Movies</title>
+    <title>Anthony and Tiago's Movies</title>
     <link rel="stylesheet" href="assets/css/styles.css?v=<?= time(); ?>">
     <link rel="stylesheet" href="./pages/ajax_styles.css?v=<?= time(); ?>">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -18,7 +18,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">Anthony's & Tiago's Movies</a>
+            <a href="index.php">Anthony & Tiago's Movies</a>
         </div>
         <button class="menu-toggle" aria-label="Menu mobile">☰</button>
         <ul class="nav-links">
@@ -53,7 +53,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </header>
 
 <section class="hero">
-    <h1>Bienvenue sur Anthony's and Tiago's Movies</h1>
+    <h1>Bienvenue sur Anthony and Tiago's Movies</h1>
     <p>Les meilleurs films lyonnais, à un prix pas cher !</p>
 </section>
 

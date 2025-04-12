@@ -29,7 +29,7 @@ $filmsTrouves = $requete->fetchAll();
 <header>
     <nav class="navbar">
         <div class="logo">
-            <a href="index.php">Anthony's & Tiago's Movies</a>
+            <a href="index.php">Anthony & Tiago's Movies</a>
         </div>
         <button class="menu-toggle" aria-label="Menu mobile">☰</button>
         <ul class="nav-links">
