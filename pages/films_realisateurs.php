@@ -71,6 +71,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </header>
 
 <br><br><br><br>
+
 <main>
     <h1>Liste des Films<?= isset($name) ? " de " . htmlspecialchars($name) : "" ?></h1>
 
@@ -86,9 +87,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <p>
                         <strong>Réalisateur :</strong>
                         <?php if (!empty($film['director_name'])): ?>
-                            <a href="films_realisateurs.php?name=<?= urlencode($film['director_name']) ?>">
-                                <?= htmlspecialchars($film['director_name']) ?>
-                            </a>
+                            <?= htmlspecialchars($film['director_name']) ?>
                         <?php else: ?>
                             <em>Non renseigné</em>
                         <?php endif; ?>
@@ -101,7 +100,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <p>Aucun film trouvé.</p>
     <?php endif; ?>
 </main>
-
 
 <?php include '../includes/footer_bas_de_page.php'; ?>
 </body>
