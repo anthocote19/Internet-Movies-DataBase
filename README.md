@@ -15,7 +15,7 @@ Here are the basics overview of the functionalities. Of course, quality and secu
 
 Homepage of the website
 
-some presentation texts
+some presentation texts 
 some videos (can be last added for example) with title, price, add to cart button
 a search solution allowing to search by title or director
 Search solution
