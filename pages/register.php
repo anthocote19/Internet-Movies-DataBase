@@ -2,42 +2,49 @@
 session_start();
 require_once '../config/database.php';
 
-$error = "";
+$messageErreur = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
+    $nom = trim($_POST['username']);
     $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $motDePasse = $_POST['password'];
 
-    if (!empty($username) && !empty($email) && !empty($password)) {
+    if (!empty($nom) && !empty($email) && !empty($motDePasse)) {
+        $motDePasseHash = password_hash($motDePasse, PASSWORD_DEFAULT);
+
         try {
-            $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([
-                'username' => $username,
+            $sql = "INSERT INTO users (username, email, password) VALUES (:nom, :email, :mdp)";
+            $requete = $pdo->prepare($sql);
+            $requete->execute([
+                'nom' => $nom,
                 'email' => $email,
-                'password' => $password_hash
+                'mdp' => $motDePasseHash
             ]);
 
             $_SESSION['user_id'] = $pdo->lastInsertId();
-            $_SESSION['username'] = $username;
+            $_SESSION['username'] = $nom;
 
-            $name_parts = explode(" ", trim($username));
-            $initiales = strtoupper(substr($name_parts[0], 0, 1) . (isset($name_parts[1]) ? substr($name_parts[1], 0, 1) : ''));
-            $_SESSION['initiales'] = $initiales;
+            
+            $morceaux = explode(" ", $nom);
+            $lettres = strtoupper(substr($morceaux[0], 0, 1));
+            if (isset($morceaux[1])) {
+                $lettres .= strtoupper(substr($morceaux[1], 0, 1));
+            }
+            $_SESSION['initiales'] = $lettres;
 
             header("Location: ../index.php");
             exit();
+
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
-                $error = " Nom d'utilisateur déjà pris, veuillez en choisir un autre.";
+                $messageErreur = "Ce nom d'utilisateur existe déjà.";
             } else {
-                $error = "Erreur lors de l'inscription : " . $e->getMessage();
+                $messageErreur = "Une erreur est survenue : " . $e->getMessage();
             }
         }
+
     } else {
-        $error = "Tous les champs sont obligatoires.";
+        $messageErreur = "Merci de remplir tous les champs.";
     }
 }
 ?>
@@ -49,25 +56,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
     <link rel="stylesheet" href="../assets/css/styles.css?v=<?= time(); ?>">
-    <link rel="stylesheet" href="register.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="register.css?v=<?= time(); ?>">
 </head>
 <body>
 
 <div class="register-wrapper">
     <div class="register-container">
         <h2>Inscription</h2>
+
         <form method="POST">
             <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Adresse email" required>
             <input type="password" name="password" placeholder="Mot de passe" required>
             <button type="submit">S'inscrire</button>
         </form>
 
-        <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
+        <?php if (!empty($messageErreur)) : ?>
+            <p class="error"><?= $messageErreur; ?></p>
+        <?php endif; ?>
 
-        <?php if (!isset($_SESSION['user_id'])): ?>
-            <a href="login.php">Déjà inscrit ? Connecte-toi</a>
-            <a href="../index.php">Ne pas s'inscrire ou se connecter ?</a>
+        <?php if (!isset($_SESSION['user_id'])) : ?>
+            <a href="login.php">Déjà un compte ? Se connecter</a>
+            <a href="../index.php">Retour à l'accueil</a>
         <?php endif; ?>
     </div>
 </div>

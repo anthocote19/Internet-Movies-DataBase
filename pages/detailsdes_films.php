@@ -9,7 +9,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $idFilm = (int) $_GET['id'];
 
-// On récupère le film avec le nom du réalisateur (JOIN)
+
 $stmt = $pdo->prepare("
     SELECT m.*, d.name AS director_name 
     FROM movies m
@@ -29,7 +29,7 @@ $realisateur = $film['director_name'] ?? null;
 $prix = htmlspecialchars($film['price'] ?? '0.00');
 $image = htmlspecialchars($film['image'] ?? 'default.jpg');
 
-// On récupère les acteurs liés au film
+
 $stmtActeurs = $pdo->prepare("
     SELECT actors.id, actors.name 
     FROM actors 

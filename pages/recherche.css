@@ -1,4 +1,3 @@
-
 body {
   font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -16,7 +15,6 @@ main.contenu-principal {
   align-items: center;
   padding: 2rem;
 }
-
 
 .resultats-recherche {
   background: rgba(0, 0, 0, 0.35);
@@ -83,13 +81,17 @@ main.contenu-principal {
   font-size: 1.15rem;
   display: block;
   transition: color 0.3s, text-shadow 0.3s;
+  position: relative;
+  z-index: 2; 
+  cursor: pointer; 
+  width: 100%;
+  height: 100%;
 }
 
 .resultats-recherche a:hover {
   color: #00fff7;
   text-shadow: 0 0 12px #00fff7;
 }
-
 
 .bouton-retour {
   display: inline-block;
@@ -112,7 +114,6 @@ main.contenu-principal {
   color: #000;
   box-shadow: 0 0 20px #00fff7, 0 0 30px #00bcd4;
 }
-
 
 @media (max-width: 768px) {
   .resultats-recherche {
@@ -146,7 +147,6 @@ main.contenu-principal {
     font-size: 0.9rem;
   }
 }
-
 
 @keyframes apparition {
   from {

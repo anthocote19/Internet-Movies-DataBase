@@ -58,7 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p><?= htmlspecialchars($info); ?></p>
             <?php endif; ?>
 
-            <?php if (!$modifie): ?>
+            <?php if ($modifie): ?>
+                <p>Vous allez être redirigé vers l'accueil dans 3 secondes...</p>
+                <script src="../assets/js/mdp.js?v=<?= time(); ?>"></script>
+            <?php else: ?>
                 <form method="POST">
                     <label>Mot de passe actuel :</label>
                     <input type="password" name="current_password" required><br>
@@ -71,8 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <button type="submit">Changer</button>
                 </form>
-            <?php else: ?>
-                <a href="../index.php" class="btn">Retour à l'accueil</a>
             <?php endif; ?>
 
             <a href="../index.php">Annuler et revenir</a><br>
