@@ -14,7 +14,7 @@ Your project is to build a website your users to buy a video but also to search 
 Here are the basics overview of the functionalities. Of course, quality and security are directly impacting your production
 
 Homepage of the website
-
+ 
 some presentation texts 
 some videos (can be last added for example) with title, price, add to cart button
 a search solution allowing to search by title or director
